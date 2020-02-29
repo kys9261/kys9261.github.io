@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="canonical" href="https://kys9261.github.io/2019/03/26/programming/study/nextstep-book/java-web-programming-next-step-3/">
+    
+
+    
+    <title>자바 웹 프로그래밍 Next Step - 2. 문자열 계산기 구현을 통한 테스트와 리팩토링 | Mike Kim 개발 블로그</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="책,자바,개발,공부,nextstep">
+    
+    <meta name="description" content="2장은 문자열 계산기 구현을 통한 테스트와 리팩토링 입니다. 사실 저는 부끄럽게도 단한번도 테스트 코드를 작성해본적이 없는데요.프로그래밍을 하면서 테스트는 했겠지만 테스트 코드를 이용해서가 아닌 IDE의 디버깅 툴과, 결과값 출력을 확인하는 방식으로 진행해 왔는데 최근 들어서는 테스트 코드를 작성하면서 개발하는게 실수로 인해 서비스에 문제가 발생하거나, 다">
+<meta name="keywords" content="책,자바,개발,공부,nextstep">
+<meta property="og:type" content="article">
+<meta property="og:title" content="자바 웹 프로그래밍 Next Step - 2. 문자열 계산기 구현을 통한 테스트와 리팩토링">
+<meta property="og:url" content="https://kys9261.github.io/2019/03/26/programming/study/nextstep-book/java-web-programming-next-step-3/index.html">
+<meta property="og:site_name" content="Mike Kim 개발 블로그">
+<meta property="og:description" content="2장은 문자열 계산기 구현을 통한 테스트와 리팩토링 입니다. 사실 저는 부끄럽게도 단한번도 테스트 코드를 작성해본적이 없는데요.프로그래밍을 하면서 테스트는 했겠지만 테스트 코드를 이용해서가 아닌 IDE의 디버깅 툴과, 결과값 출력을 확인하는 방식으로 진행해 왔는데 최근 들어서는 테스트 코드를 작성하면서 개발하는게 실수로 인해 서비스에 문제가 발생하거나, 다">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2020-01-18T17:06:50.940Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="자바 웹 프로그래밍 Next Step - 2. 문자열 계산기 구현을 통한 테스트와 리팩토링">
+<meta name="twitter:description" content="2장은 문자열 계산기 구현을 통한 테스트와 리팩토링 입니다. 사실 저는 부끄럽게도 단한번도 테스트 코드를 작성해본적이 없는데요.프로그래밍을 하면서 테스트는 했겠지만 테스트 코드를 이용해서가 아닌 IDE의 디버깅 툴과, 결과값 출력을 확인하는 방식으로 진행해 왔는데 최근 들어서는 테스트 코드를 작성하면서 개발하는게 실수로 인해 서비스에 문제가 발생하거나, 다">
+    
+
+    
+        <link rel="alternate" href="https://kys9261.github.io/rss.xml" title="Mike Kim 개발 블로그" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-45002584-11', 'auto');
+ga('send', 'pageview');
+</script>
+    
+    
+    
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script type="text/javascript">
+(adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-0528563211821066",
+    enable_page_level_ads: true
+});
+</script>
+    
+
+
+</head>
+</html>
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">To infinity and beyond</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item">
+                                    <a class="main-nav-list-link" href="/">홈</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/">Programming</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Algorithm/">Algorithm</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/DevOps/">DevOps</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Etc/">Etc</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Java/">Java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Life/">Life</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Study/">Study</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item">
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="검색">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '포스트',
+            PAGES: 'Pages',
+            CATEGORIES: '카테고리',
+            TAGS: '태그',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Programming/Study/">Study</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-programming/study/nextstep-book/java-web-programming-next-step-3" class="article article-single article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        자바 웹 프로그래밍 Next Step - 2. 문자열 계산기 구현을 통한 테스트와 리팩토링
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2019/03/26/programming/study/nextstep-book/java-web-programming-next-step-3/" class="article-date">
+            <time datetime="2019-03-26T12:51:34.000Z" itemprop="datePublished">2019-03-26</time>
+        </a>
+    </div>
+
+		
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/nextstep/">nextstep</a>, <a class="tag-link" href="/tags/개발/">개발</a>, <a class="tag-link" href="/tags/공부/">공부</a>, <a class="tag-link" href="/tags/자바/">자바</a>, <a class="tag-link" href="/tags/책/">책</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p>2장은 문자열 계산기 구현을 통한 테스트와 리팩토링 입니다.</p>
+<p>사실 저는 부끄럽게도 단한번도 테스트 코드를 작성해본적이 없는데요.<br>프로그래밍을 하면서 테스트는 했겠지만 테스트 코드를 이용해서가 아닌 IDE의 디버깅 툴과, 결과값 출력을 확인하는 방식으로 진행해 왔는데 최근 들어서는 테스트 코드를 작성하면서 개발하는게 실수로 인해 서비스에 문제가 발생하거나, 다른 예외 상황에 대해 생각해 볼 수 있게끔 해주는거 같아서 필요성을 느끼고는 있었으나 실제로 업무에 적용하지는 못하고 있었는데 이 책을 공부하면서 테스트 코드 작성에 익숙해지고 실무에서도 자유롭게 사용할 수 있게끔 되었으면 좋겠습니다.</p>
+<h3 id="junit-기본-사용법"><a href="#junit-기본-사용법" class="headerlink" title="junit 기본 사용법"></a>junit 기본 사용법</h3><p>시작하기전에 junit4에 대한 사용법을 익혀봅니다, 책에 있는 링크는 Youtube가 변경되어서 그런가 정상적으로 영상이 안나와서 <a href="https://youtu.be/tyZMdwT3rlY" rel="external nofollow noopener noreferrer" target="_blank">여기</a>에서 보면 정상적으로 영상을 확인 가능하고요.<br>영상에는 책에서 간단하게 소개하는 junit4에 대해서 다루고 있습니다.  </p>
+<p>책에서 간단하게 소개되는 junit annotation은</p>
+<ul>
+<li>@Test      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 단위 테스트를 정의함</li>
+<li>@Before    &nbsp;- 각 단위테스트 실행 전 실행되는 함수를 정의함 (@Test가 붙은 각각의 함수가 실행되기전 실행됨)</li>
+<li>@After     &nbsp;&nbsp;&nbsp;&nbsp;- 각 단위테스트 실행 후 실행되는 함수를 정의함 (@Test가 붙은 각각의 함수가 실행되고 나서  실행됨)</li>
+</ul>
+<p>이정도 이고, 함수는</p>
+<ul>
+<li>assertEquals() - 값이 같은지 확인</li>
+<li>assertTrue()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 값이 true인지 확인</li>
+<li>assertFalse()&nbsp;&nbsp;&nbsp;&nbsp;- 값이 false인지 확인</li>
+<li>assertNull()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 값이 null인지 확인</li>
+</ul>
+<p>이정도 인데 이거 외에도 다른 annotation과 함수들이 있으므로 다음번에 따로 포스팅 하기로 하겠습니다.<br>&nbsp;</p>
+<h3 id="문자열-계산기-요구사항"><a href="#문자열-계산기-요구사항" class="headerlink" title="문자열 계산기 요구사항"></a>문자열 계산기 요구사항</h3><p>문자열 계산기를 구현하기 앞서 무선 요구사항을 먼저 확인해보겠습니다.</p>
+<ul>
+<li>쉼표 또는 콜론을 구분자로 가지는 문자열을 전달하는 경우 구분자로 분리한 각 숫자의 합을 반환</li>
+<li>1번의 쉼표 또는 콜론외에 커스텀 구분자를 지정할수 있고, ‘//‘와 ‘\n’사이의 문자를 커스텀 구분자로 사용</li>
+<li>숫자 값이 음수일때 RuntimeException 처리 해야함</li>
+</ul>
+<p>구현전 요구사항을 더 작은 단위로 나눠 테스트할 경우의 수를 생각해보는게 좋다고 하는데요<br>어떤 테스트케이스를 생각해보는게 좋을까 생각해보다가 아래와 같은 테스트 케이스를 생각해보습니다.<br>(더 작은단위로 쪼개라는게 <strong>더 디테일하게 테스트 케이스를 생각해보자</strong> 라고 받아들였습니다.)</p>
+<ul>
+<li>쉼표 또는 콜론 외에 다른 구분자가 들어올 때 (커스텀구분자로 정의 하지 않은 상태에서)</li>
+<li>커스텀 구분자로 정의 했으나 각숫자를 다른 구분자로 구분했을 때</li>
+<li>숫자와 구분자 외에 다른 문자가 포함되어있을 때 (숫자 앞,뒤에 공백이 들어가는 경우도 포함)</li>
+</ul>
+<p>위와 같은 테스트 케이스를 생각했고, 요구사항에 맞춰 개발하고 리팩토링 하면서 테스트 케이스를 하나씩 추가해보도록 하겠습니다.</p>
+<p>그리고 코드를 작성하고, 리팩토링을 할때 아래의 기준에 맞춰서 개발하는게 일정수준으로 깔끔한 코드를 구현할 수 있다고 하고,<br>완벽하게 기준에 맞춰서 구현할 수 는 없지만 최대한 노력하면서 구현하는게 좋다고 합니다.</p>
+<ul>
+<li>메소드가 한 가지 책임만 가지도록 구현한다.</li>
+<li>들여쓰기 깊이를 1단계로 유지한다. (중첩문 사용을 지양하자 라는 뜻)</li>
+<li>else를 사용하지 말아라.</li>
+</ul>
+<p>위에 나와있는 요구사항과 생각해본 테스트 케이스를 토대로 단위테스트 코드를 작성해 보았습니다.<br>(책에 나와있는 테스트 코드외에 몇개를 더 추가했는데, 혹시라도 더 추가하면 좋을만한게 있으면 코멘트 달아주세요!)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.junit.Before;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringCalculatorTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> StringCalculator stringCalculator;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setting</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        stringCalculator = <span class="keyword">new</span> StringCalculator();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 입력된 문자열값이 빈 문자열 일때</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paramStringEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        assertEquals(<span class="number">0</span>, stringCalculator.add(<span class="string">""</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 입력된 문자열값이 null일때</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paramStringNull</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        assertEquals(<span class="number">0</span>, stringCalculator.add(<span class="keyword">null</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 쉼표 또는 콜론으로 구분자를 가진 문자열 계산</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sum</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        assertEquals(<span class="number">6</span>, stringCalculator.add(<span class="string">"1,2,3"</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 커스텀 구분자를 가진 문자열 계산</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sumCustomSeparator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        assertEquals(<span class="number">6</span>, stringCalculator.add(<span class="string">"//;\n1;2;3"</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 문자열에 음수값이 있을때</span></span><br><span class="line">    <span class="meta">@Test</span>(expected = RuntimeException.class)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paramStringNegative</span><span class="params">()</span> <span class="keyword">throws</span> RuntimeException </span>&#123;</span><br><span class="line">        stringCalculator.add(<span class="string">"1,-1,3"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 커스텀 구분자를 정하지 않고, 쉼표 또는 콜론 구분자가 아닐때</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paramInvalidSeparator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        assertEquals(<span class="number">0</span>, stringCalculator.add(<span class="string">"1/2/3"</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 입력된 문자열에 숫자 앞뒤 공백이 있을때</span></span><br><span class="line">    <span class="meta">@Test</span>(expected = NumberFormatException.class)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paramWhiteSpace</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        stringCalculator.add(<span class="string">"1, 2,3 "</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 입력된 문자열에 숫자 앞뒤 공백이 있을때</span></span><br><span class="line">    <span class="meta">@Test</span>(expected = NumberFormatException.class)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paramWhiteSpace2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        stringCalculator.add(<span class="string">"//;\n1 ; 2; 3 ;"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>맨 아래 paramWithSpace는 문자열에 공백이 있을 경우 trim()을 이용해 공백 제거 후 처리를 해도 되지만<br>NumberFormatException 이 발생하는 것으로 개발을 했고,<br>테스트 할때 아래 코드처럼 input값을 2개 종류로 확인하고 싶었으나 가장 위에서 실행된 케이스만 실행되고 종료되었습니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 입력된 문자열에 숫자 앞뒤 공백이 있을때</span></span><br><span class="line"><span class="meta">@Test</span>(expected = NumberFormatException.class)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paramWhiteSpace</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    stringCalculator.add(<span class="string">"1, 2,3 "</span>);             <span class="comment">// 이 코드만 실행 되고 테스트 종료됨</span></span><br><span class="line">    stringCalculator.add(<span class="string">"//;\n1 ; 2; 3 ;"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>그래서 따로 분리를 해놨는데 한개의 테스트 케이스 함수내에서 여러개의 조건을 실행하는 방법에 대해 확인을 해봐야 할거 같습니다.</p>
+<p>그럼 이번에는 요구사항에 맞는 동작을 수행하고, 모든 테스트 케이스를 통과하는 코드를 작성해보겠습니다.<br>아래 코드는 위 작성된 테스트 케이스를 모두 pass하는 코드이나 리팩토링을 하기 전 상태입니다.<br>책에서는 리팩토링과 테스트 케이스 작성이 동시에 진행이 되었는데 요구사항을 더 작은 단위로 나눠서 테스트할 경우의 수를 생각하다보니 테스트 케이스를 먼저 작성하고 실행 코드를 개발하게 되었습니다.<br>(테스트코드를 이용한 개발 경험이 부족해 원래 이렇게 진행되는게 맞는건진 잘 모르겠습니다)</p>
+<p>아래는 구현된 add 함수 입니다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.regex.Matcher;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringCalculator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(String text)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 빈 문자열 확인</span></span><br><span class="line">        <span class="keyword">if</span> (text == <span class="keyword">null</span> || text.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 문자에 구분자 확인</span></span><br><span class="line">        String[] splitTextArr = <span class="keyword">null</span>;</span><br><span class="line">        Matcher m = Pattern.compile(<span class="string">"//(.)\n(.*)"</span>).matcher(text);</span><br><span class="line">        <span class="keyword">if</span> (m.find()) &#123;</span><br><span class="line">            splitTextArr = m.group(<span class="number">2</span>).split(m.group(<span class="number">1</span>));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(text.contains(<span class="string">","</span>) || text.contains(<span class="string">":"</span>)) &#123;</span><br><span class="line">            splitTextArr = text.split(<span class="string">",|:"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 구분자 조건에 만족하지 않음</span></span><br><span class="line">        <span class="keyword">if</span> (splitTextArr == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 배열에서 숫자 변환후 합산</span></span><br><span class="line">        <span class="keyword">int</span> addNumber = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;splitTextArr.length; i++) &#123;</span><br><span class="line">            <span class="comment">// 음수값 확인</span></span><br><span class="line">            <span class="keyword">if</span> (Integer.valueOf(splitTextArr[i]) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            addNumber += Integer.valueOf(splitTextArr[i]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> addNumber;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>부분적으로 주석을 간단하게 적어 두었는데요.<br>주석들을 기준으로 add함수 1개에서 여러개의 함수로 나뉘어지면서 리팩토링 할 예정입니다.<br>그리고 책에서도 심하다 싶을정도로 리팩토링을 한 이유는 리팩토링을 하는 연습을 하기 위함이라고 합니다.<br>&nbsp;  </p>
+<p>리팩토링 진행하면서 생각해본 내용을 적어보자면  </p>
+<ol>
+<li>StringUtils의 사용</li>
+</ol>
+<p>아래 코드는 문자열 text가 주어지면 null 이거나 “” 일때 0을 리턴하게 되어있는데요.<br>if문에서 조건을 commons-lang라이브러리의 StringUtils클래스에 있는 <a href="http://commons.apache.org/proper/commons-lang/javadocs/api-release/org/apache/commons/lang3/StringUtils.html#isEmpty-java.lang.CharSequence-" rel="external nofollow noopener noreferrer" target="_blank">isEmpty</a> 함수를 이용해서 처리해도 될거 같다는 생각을 했습니다.</p>
+<p>다만 라이브러리를 따로 추가해줘야해서 여기서는 사용하지는 않았습니다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 빈 문자열 확인</span></span><br><span class="line"><span class="keyword">if</span> (text == <span class="keyword">null</span> || text.isEmpty()) &#123;   <span class="comment">// if (StringUtils.isEmpty(text)) 동일한 동작</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol start="2">
+<li>Exception 처리</li>
+</ol>
+<p>음수를 식별하는 함수는 아래와 같이 구현했습니다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">checkNegative</span><span class="params">(String numberText)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> number = Integer.parseInt(numberText);</span><br><span class="line">    <span class="keyword">if</span>(number &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> number;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>구분자로 나눈 문자열 배열에서 한개씩 param값으로 넘겨서 int 형변환을 시켜주고 음수 판단을 처리하는 부분인데요.<br>음수일때 RuntimeException을 발생하게 구현했습니다. 여기까지는 별로 고민할 부분이 없었는데요  </p>
+<p>테스트 케이스 코드중에 문자열에 공백이 포함되어 있는 값이 들어올때 NumberFormatException 이 발생하는걸로 테스트 케이스를 작성했는데 위에 Integer.parseInt() 호출시에 numberText가 ‘ 1’, ‘2 ‘, ‘ 3 ‘이런식으로 앞뒤 어느 한군데라도 공백을 포함하고 있으면 Exception이 발생을 합니다.<br>음수 처리하는것 처럼 따로 Exception 발생 코드를 추가하지 않아도 말이죠.  </p>
+<p>위 내용의 경우엔 요구사항에 없는 내용이라 어떻게 구현하던 상관은 없을거 같습니다만 그래도 try-catch를 통해서 예외처리를 하거나, 아예 param값으로 받은 numberText를 trim함수를 이용해 공백제거를 하는 식으로 구현을 해도 되었을거 같다는 생각을 했습니다. 공부용으로는 Exception을 발생하고 프로그램이 죽어도 괜찮겠지만, 실제 서비스에서는 Exception 발생 가능성이 있는 부분엔 예외처리를 통해서 프로그램이 끝까지 실행되게끔 처리하는게 좋다고 생각을 합니다.(<del>생각은 이렇게 하지만 업무에서 예외처리를 자주 빼먹는게 함정 입니다만</del>)</p>
+<p>테스트 코드를 작성하고, 동작코드를 리팩토링 하면서 나온 코드는 아래와 같습니다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.regex.Matcher;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringCalculator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(String text)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 빈 문자열 확인</span></span><br><span class="line">        <span class="keyword">if</span> (isEmpty(text)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 문자에 구분자 확인</span></span><br><span class="line">        String[] splitTextArr = textSeparate(text);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 구분자 조건에 만족하지 않음</span></span><br><span class="line">        <span class="keyword">if</span> (splitTextArr == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 배열에서 숫자 변환후 합산</span></span><br><span class="line">        <span class="keyword">return</span> sum(parseToInt(textSeparate(text)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">(String text)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (text == <span class="keyword">null</span> || text.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String[] textSeparate(String text) &#123;</span><br><span class="line">        String[] speratedArr = <span class="keyword">null</span>;</span><br><span class="line">        Matcher m = Pattern.compile(<span class="string">"//(.)\n(.*)"</span>).matcher(text);</span><br><span class="line">        <span class="keyword">if</span> (m.find()) &#123;</span><br><span class="line">            speratedArr = m.group(<span class="number">2</span>).split(m.group(<span class="number">1</span>));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(text.contains(<span class="string">","</span>) || text.contains(<span class="string">":"</span>)) &#123;</span><br><span class="line">            speratedArr = text.split(<span class="string">",|:"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> speratedArr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] parseToInt(String[] textSeparatedArr) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] numberArr = <span class="keyword">new</span> <span class="keyword">int</span>[textSeparatedArr.length];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;textSeparatedArr.length; i++) &#123;</span><br><span class="line">            numberArr[i] = checkNegative(textSeparatedArr[i]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> numberArr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">checkNegative</span><span class="params">(String numberText)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> number = Integer.parseInt(numberText);</span><br><span class="line">        <span class="keyword">if</span>(number &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> number;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span>[] numbers)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;numbers.length; i++) &#123;</span><br><span class="line">            sum += numbers[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>챕터 2에 있는 내용을 제 스타일대로 조금 변형해서 공부하면서 기록 해보았습니다.<br>혹시라도 추가적으로 리팩토링을 했으면 좋겠다, 혹은 이런것도 생각해보면 좋겠다 하는게 있으면 언제든 댓글 달아주세요<br>저는 피드백에 항상 목이 말라있습니다.</p>
+<p>위에서 사용한 코드는 <a href="https://github.com/kys9261/nextstep-book-study/tree/master/nextstep-2-stringcalculator" rel="external nofollow noopener noreferrer" target="_blank">여기</a>에 있습니다.<br>&nbsp; </p>
+<p><strong>추가학습자료</strong></p>
+<ul>
+<li><a href="https://goo.gl/2ny56W" rel="external nofollow noopener noreferrer" target="_blank">테스트 주도 개발 : 고품질 쾌속개발을 위한 TDD 실천법과 도구 1장 공개자료</a></li>
+<li><a href="https://book.naver.com/bookdb/book_detail.nhn?bid=7443642" rel="external nofollow noopener noreferrer" target="_blank">테스트 주도개발 / 2014년</a></li>
+<li><a href="https://book.naver.com/bookdb/book_detail.nhn?bid=7047630" rel="external nofollow noopener noreferrer" target="_blank">리팩토링 : 코드 품질을 개선하는 객체지향 사고법 / 2012년</a></li>
+<li><a href="https://book.naver.com/bookdb/book_detail.nhn?bid=6053135" rel="external nofollow noopener noreferrer" target="_blank">손에 잡히는 정규 표현식 / 2009년</a></li>
+<li>정규표현식 연습 : <a href="http://regexr.com" rel="external nofollow noopener noreferrer" target="_blank">http://regexr.com</a></li>
+<li><a href="https://www.youtube.com/watch?v=08YYZ0acYNE" rel="external nofollow noopener noreferrer" target="_blank">문자열 계산기 구현 및 리팩토링 1단계</a></li>
+<li><a href="https://www.youtube.com/watch?v=AAMap-pXXN4" rel="external nofollow noopener noreferrer" target="_blank">문자열 계산기 구현 및 리팩토링 2단계</a></li>
+<li><a href="https://www.youtube.com/watch?v=weE5PVX9D60" rel="external nofollow noopener noreferrer" target="_blank">문자열 계산기 구현 및 리팩토링 3단계</a></li>
+</ul>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://kys9261.github.io/2019/03/26/programming/study/nextstep-book/java-web-programming-next-step-3/" data-id="ck77c6yjn005ih4upe5sucvgo" class="article-share-link"><i class="fa fa-share"></i>공유하기</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        <script src="https://utteranc.es/client.js" repo="kys9261/blog-comments" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+</script>
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>팔로우:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="envelope" href="mailto:nser789@gmail.com" target="_blank" rel="external nofollow noopener noreferrer">
+                        <i class="icon fa fa-envelope"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/kys9261" target="_blank" rel="external nofollow noopener noreferrer">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="https://kys9261.github.io/rss.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2019/04/02/programming/study/nextstep-book/java-web-programming-next-step-4/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">새로운</strong>
+        <p class="article-nav-title">
+        
+            자바 웹 프로그래밍 Next Step - 3. 개발 환경 구축 및 웹 서버 실습 요구사항
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2019/03/21/programming/algorithm/codingTest/hackerrank-codingtest-input/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">오래된</strong>
+        <p class="article-nav-title">해커랭크 코딩테스트 main함수 돌아보기</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">최근 글</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Java/">Java</a></p>
+                            <p class="item-title"><a href="/2019/07/10/programming/java/number-literals-can-use-underscore-for-a-punctuation-mark/" class="title">숫자 리터럴에 구분자로 밑줄(_) 사용 가능</a></p>
+                            <p class="item-date"><time datetime="2019-07-10T04:55:42.000Z" itemprop="datePublished">2019-07-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Etc/">Etc</a></p>
+                            <p class="item-title"><a href="/2019/07/03/programming/etc/npm-package-install-from-github/" class="title">NPM 패키지를 Github에서 설치하기</a></p>
+                            <p class="item-date"><time datetime="2019-07-03T14:18:18.000Z" itemprop="datePublished">2019-07-03</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/DevOps/">DevOps</a></p>
+                            <p class="item-title"><a href="/2019/05/22/programming/devops/gitlab-runner-connect-with-sonarqube/" class="title">Gitlab Runner로 SonarQube 분석 자동화 하기</a></p>
+                            <p class="item-date"><time datetime="2019-05-22T02:22:16.000Z" itemprop="datePublished">2019-05-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Study/">Study</a></p>
+                            <p class="item-title"><a href="/2019/05/13/programming/study/nextstep-book/java-web-programming-next-step-5/" class="title">자바 웹 프로그래밍 Next Step - 4. HTTP 웹 서버 구현을 통해 HTTP 이해하기</a></p>
+                            <p class="item-date"><time datetime="2019-05-13T03:36:25.000Z" itemprop="datePublished">2019-05-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Study/">Study</a></p>
+                            <p class="item-title"><a href="/2019/05/09/programming/study/programmers-web-backend-study/" class="title">[프로그래머스] 웹 백엔드 시스템 구현 온라인 스터디</a></p>
+                            <p class="item-date"><time datetime="2019-05-09T14:25:50.000Z" itemprop="datePublished">2019-05-09</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">아카이브</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">7월 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">5월 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">4월 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">3월 2019</a><span class="archive-list-count">7</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">태그 클라우드</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/GitLab/" style="font-size: 13.33px;">GitLab</a> <a href="/tags/PS/" style="font-size: 10px;">PS</a> <a href="/tags/SonarQube/" style="font-size: 10px;">SonarQube</a> <a href="/tags/backend/" style="font-size: 10px;">backend</a> <a href="/tags/flickering/" style="font-size: 10px;">flickering</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/gitlab-runner/" style="font-size: 10px;">gitlab runner</a> <a href="/tags/googlechart/" style="font-size: 10px;">googlechart</a> <a href="/tags/hackerrank/" style="font-size: 10px;">hackerrank</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/main/" style="font-size: 10px;">main</a> <a href="/tags/nextstep/" style="font-size: 20px;">nextstep</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/numeric/" style="font-size: 10px;">numeric</a> <a href="/tags/programmers/" style="font-size: 10px;">programmers</a> <a href="/tags/punctuation/" style="font-size: 10px;">punctuation</a> <a href="/tags/runner/" style="font-size: 10px;">runner</a> <a href="/tags/sonarqube/" style="font-size: 10px;">sonarqube</a> <a href="/tags/tooltip/" style="font-size: 10px;">tooltip</a> <a href="/tags/ubuntu/" style="font-size: 16.67px;">ubuntu</a> <a href="/tags/underscore/" style="font-size: 10px;">underscore</a> <a href="/tags/web/" style="font-size: 10px;">web</a> <a href="/tags/개발/" style="font-size: 20px;">개발</a> <a href="/tags/공부/" style="font-size: 20px;">공부</a> <a href="/tags/구글차트/" style="font-size: 10px;">구글차트</a> <a href="/tags/백엔드/" style="font-size: 10px;">백엔드</a> <a href="/tags/소나큐브/" style="font-size: 10px;">소나큐브</a> <a href="/tags/알고리즘/" style="font-size: 10px;">알고리즘</a> <a href="/tags/온라인스터디/" style="font-size: 10px;">온라인스터디</a> <a href="/tags/자바/" style="font-size: 20px;">자바</a> <a href="/tags/책/" style="font-size: 20px;">책</a> <a href="/tags/코딩테스트/" style="font-size: 13.33px;">코딩테스트</a> <a href="/tags/툴팁깜빡임/" style="font-size: 10px;">툴팁깜빡임</a> <a href="/tags/프로그래머스/" style="font-size: 10px;">프로그래머스</a> <a href="/tags/회고/" style="font-size: 10px;">회고</a>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 Mike Kim</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+
