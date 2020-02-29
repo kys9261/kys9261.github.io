@@ -6,7 +6,7 @@
   <link href="/rss.xml" rel="self"/>
   
   <link href="https://kys9261.github.io/"/>
-  <updated>2020-02-29T08:13:45.901Z</updated>
+  <updated>2020-02-29T13:32:42.333Z</updated>
   <id>https://kys9261.github.io/</id>
   
   <author>
@@ -15,6 +15,42 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>맥 알프레드(Alfred) 혹은 스폿라이트(Spotlight)에서 앱 검색이 안될때</title>
+    <link href="https://kys9261.github.io/2020/02/29/mac/mac-spotlight-desont-show-application/"/>
+    <id>https://kys9261.github.io/2020/02/29/mac/mac-spotlight-desont-show-application/</id>
+    <published>2020-02-29T10:19:54.000Z</published>
+    <updated>2020-02-29T13:32:42.333Z</updated>
+    
+    <content type="html"><![CDATA[<p>저는 항상 맥에서 어플리케이션을 실행할때 Alfred를 이용해서 실행하는 편입니다. 아래 이미지처럼 알프레드를 열고 앞에 두세글자만 입력하고 엔터를 누르면 앱을 실행할 수 있어서 아주 편하게 사용하고 있었는데요.</p><p><img src="https://user-images.githubusercontent.com/7028715/75605804-81f00900-5b29-11ea-86db-3ffe9b14dfc4.png" alt="알프레드에서 카카오톡을 열때"></p><p>새로 맥을 구입하고 이것 저것 셋팅을 하던중에 제가 뭘 잘못 건드렸는지 알프레드의 검색에서 Application 폴더에 있는 어플리케이션이 검색이 되지 않았습니다. </p><p>기본앱인 터미널이나 키체인등 은 검색이 되는데 추가로 설치한 앱은 검색이 되지 않았죠.</p><p>Spotlight에서도 마찬가지로 검색이 되지 않았는데요.<br>알프레드가 Spotlight에서 만든 인덱싱을 이용해 검색을 지원해주다보니 Spotlight에서 검색이 안되면 Alfred에서도 물론 검색이 안되는거 같았습니다.</p><p>애플 지원 사이트에 있는 <a href="https://support.apple.com/ko-kr/HT201716" rel="external nofollow noopener noreferrer" target="_blank">Mac에서 Spotlight 인덱스를 재구성하는 방법</a> 이라는 공식 문서를 보고 따라해도 정상화 되지는 않았고.</p><p>터미널을 이용해 인덱스 재구성을 실행하였어도 동일하게 검색은 안되었습니다.</p><p>그러던중 드디어 해결 방법을 찾았습니다.</p><p>방법은 터미널에 들어가서 아래 4개의 명령어를 순서대로 입력하면 됩니다.</p><ol><li><p>Spotlight 기능을 끈다.</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mdutil -a -i off</span><br></pre></td></tr></table></figure></li><li><p>Spotlight의 인덱스 메타파일을 언로드 한다.</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist</span><br></pre></td></tr></table></figure></li><li><p>언로드한 파일을 다시 로드한다.</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist</span><br></pre></td></tr></table></figure></li><li><p>Spotlight를 다시 켠다.</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mdutil -a -i on</span><br></pre></td></tr></table></figure></li></ol><p>위 와 같이 진행했더니 정상적으로 알프레드에서도 어플리케이션 검색이 되는걸 확인했습니다!!</p><p>참고 : <a href="https://apple.stackexchange.com/a/368075" rel="external nofollow noopener noreferrer" target="_blank">https://apple.stackexchange.com/a/368075</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;저는 항상 맥에서 어플리케이션을 실행할때 Alfred를 이용해서 실행하는 편입니다. 아래 이미지처럼 알프레드를 열고 앞에 두세글자만 입력하고 엔터를 누르면 앱을 실행할 수 있어서 아주 편하게 사용하고 있었는데요.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;h
+      
+    
+    </summary>
+    
+      <category term="Mac" scheme="https://kys9261.github.io/categories/Mac/"/>
+    
+      <category term="Tips" scheme="https://kys9261.github.io/categories/Mac/Tips/"/>
+    
+    
+      <category term="mac" scheme="https://kys9261.github.io/tags/mac/"/>
+    
+      <category term="macos" scheme="https://kys9261.github.io/tags/macos/"/>
+    
+      <category term="catalina" scheme="https://kys9261.github.io/tags/catalina/"/>
+    
+      <category term="spotlight" scheme="https://kys9261.github.io/tags/spotlight/"/>
+    
+      <category term="alfred" scheme="https://kys9261.github.io/tags/alfred/"/>
+    
+  </entry>
   
   <entry>
     <title>숫자 리터럴에 구분자로 밑줄(_) 사용 가능</title>
