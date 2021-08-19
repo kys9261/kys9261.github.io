@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="canonical" href="https://kys9261.github.io/2021/08/19/programming/java/simpledateformat-is-thread-unsafe/">
+    
+
+    
+    <title>SimpleDateFormat은 thread-safe하지 않습니다. | Mike Kim 개발 블로그</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="java,simpledateformat,thread,thread-safe">
+    
+    <meta name="description" content="설명SonarQube를 이용해 코드의 취약점이나 잠재적 오류 발생 포인트를 확인하고 있는도중에 아래와 같은 오류 메시지를 발견하였습니다.  이전에 작업하셨던 분이 String값을 Date 객체로 변환하기 위해 SimpleDateFormat을 쓰고,모든 객체에서 참조하면 관리가 편해지고, 객체 생성을 안해도 되니까 static final을 이용해 만드신거 같">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SimpleDateFormat은 thread-safe하지 않습니다.">
+<meta property="og:url" content="https://kys9261.github.io/2021/08/19/programming/java/simpledateformat-is-thread-unsafe/index.html">
+<meta property="og:site_name" content="Mike Kim 개발 블로그">
+<meta property="og:description" content="설명SonarQube를 이용해 코드의 취약점이나 잠재적 오류 발생 포인트를 확인하고 있는도중에 아래와 같은 오류 메시지를 발견하였습니다.  이전에 작업하셨던 분이 String값을 Date 객체로 변환하기 위해 SimpleDateFormat을 쓰고,모든 객체에서 참조하면 관리가 편해지고, 객체 생성을 안해도 되니까 static final을 이용해 만드신거 같">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://user-images.githubusercontent.com/7028715/57820510-128e7000-77c8-11e9-9b06-142c46de5e04.png">
+<meta property="article:published_time" content="2021-08-19T04:27:46.000Z">
+<meta property="article:modified_time" content="2021-08-19T12:56:25.642Z">
+<meta property="article:author" content="Mike Kim">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="simpledateformat">
+<meta property="article:tag" content="thread">
+<meta property="article:tag" content="thread-safe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/7028715/57820510-128e7000-77c8-11e9-9b06-142c46de5e04.png">
+    
+
+    
+        <link rel="alternate" href="https://kys9261.github.io/rss.xml" title="Mike Kim 개발 블로그" type="application/atom+xml">
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-45002584-11', 'auto');
+ga('send', 'pageview');
+</script>
+    
+    
+    
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script type="text/javascript">
+(adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-0528563211821066",
+    enable_page_level_ads: true
+});
+</script>
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">To infinity and beyond</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item">
+                                    <a class="main-nav-list-link" href="/">홈</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Mac/">Mac</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Mac/Tips/">Tips</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/">Programming</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Algorithm/">Algorithm</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/DevOps/">DevOps</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Etc/">Etc</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Java/">Java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Life/">Life</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Study/">Study</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item">
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="검색">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '포스트',
+            PAGES: 'Pages',
+            CATEGORIES: '카테고리',
+            TAGS: '태그',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Programming/Java/">Java</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-programming/java/simpledateformat-is-thread-unsafe" class="article article-single article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        SimpleDateFormat은 thread-safe하지 않습니다.
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2021/08/19/programming/java/simpledateformat-is-thread-unsafe/" class="article-date">
+            <time datetime="2021-08-19T04:27:46.000Z" itemprop="datePublished">2021-08-19</time>
+        </a>
+    </div>
+
+		
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="tag-link-link" href="/tags/simpledateformat/" rel="tag">simpledateformat</a>, <a class="tag-link-link" href="/tags/thread/" rel="tag">thread</a>, <a class="tag-link-link" href="/tags/thread-safe/" rel="tag">thread-safe</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h1 id="설명"><a href="#설명" class="headerlink" title="설명"></a>설명</h1><p>SonarQube를 이용해 코드의 취약점이나 잠재적 오류 발생 포인트를 확인하고 있는도중에 아래와 같은 오류 메시지를 발견하였습니다.</p>
+<p><img src="https://user-images.githubusercontent.com/7028715/57820510-128e7000-77c8-11e9-9b06-142c46de5e04.png" alt="sonarqube 이미지"></p>
+<p>이전에 작업하셨던 분이 String값을 Date 객체로 변환하기 위해 SimpleDateFormat을 쓰고,<br>모든 객체에서 참조하면 관리가 편해지고, 객체 생성을 안해도 되니까 static final을 이용해 만드신거 같습니다.</p>
+<ul>
+<li>다행이 사용되는 부분이 없었습니다.</li>
+</ul>
+<p>SonarQube에서는 저렇게 코드를 작성하는게 문제가 있다고 하는데 어떤문제가 있는지 한번 알아보도록 하겠습니다.<br>해당 에러의 구체적인 설명은 아래와 같이 나와있는데요 </p>
+<p><img src="https://user-images.githubusercontent.com/7028715/57820756-fb9c4d80-77c8-11e9-8aeb-62fb986bb7d7.png" alt="sonqrqube 이미지2"></p>
+<p>가장 윗줄에 <code>Non-thread-safe fields should not be static</code> 라고 적혀 있네요.<br><strong>스레드에서 안전하지 않은 필드로 static이 되면 안된다.</strong> 라는 말 같은데요 아래 설명을 더 읽어보면</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">자바 라이브러리의 모든 클래스는 thread-safe 하게 작성되지 않았습니다. 멀티 스레드 방식으로 이것들을 사용하면 런타임에서 exception 또는 데이터 문제를 야기할 가능성이 높습니다. </span><br><span class="line"></span><br><span class="line">Calendar, DateFormat, javax.xml.xpath.XPath, javax.xml.validation.SchemaFactory에 static을 사용할때 이런 이슈가 발생합니다.</span><br></pre></td></tr></table></figure>
+
+<p>이런 설명과 함께 예제 코드까지 보여주고 있습니다.<br>결국 SimpleDateFormat을 멀티 스레드 환경에서 사용시에는 static 키워드를 사용하면 안된다고 하는건데 왜 쓰면 문제가 날지 궁금해졌습니다.</p>
+<p>일단 SimpleDateFormat 클래에도 아래와 같은 설명이 있었습니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Date formats are not synchronized.</span></span><br><span class="line"><span class="comment"> * Date 포맷은 동기화 되지 않습니다.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * It is recommended to create separate format instances for each thread.</span></span><br><span class="line"><span class="comment"> * 각각의 스레드에서 분리된 포맷 인스턴스를 사용하길 추천합니다.</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment"> * If multiple threads access a format concurrently, it must be synchronized externally.</span></span><br><span class="line"><span class="comment"> * 만약 멀티 스레드에서 동시에 접근하는경우 외부 동기 처리가 필요합니다.</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="테스트"><a href="#테스트" class="headerlink" title="테스트"></a>테스트</h1><p>그럼 SimpleDateFormat을 멀티 스레드에서 사용했을때 어떤 문제가 발생하는지 한번 테스트를 해 보도록 하겠습니다.</p>
+<p>SimpleDateFormat을 static으로 만들어주고</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> SimpleDateFormat DATE_FORMAT = <span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>스레드 안에서 String으로 입력된 날짜를 파싱하는 그런 형태로 테스트를 진행을 해보았는데요</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String date = <span class="string">&quot;20210819&quot;</span>;</span><br><span class="line">System.out.println(seq + <span class="string">&quot; : &quot;</span> + DATE_FORMAT.parse(date));</span><br></pre></td></tr></table></figure>
+
+<p>아래와같은 형태의 NumberFormatException 이 발생을 하였고</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> java.lang.NumberFormatException: multiple points</span><br><span class="line"><span class="number">2.</span> java.lang.NumberFormatException: For input string: <span class="string">&quot;E.2919E2&quot;</span></span><br><span class="line"><span class="number">3.</span> java.lang.NumberFormatException: For input string: <span class="string">&quot;E.2919&quot;</span></span><br><span class="line"><span class="number">4.</span> java.lang.NumberFormatException: For input string: <span class="string">&quot;E&quot;</span></span><br><span class="line"><span class="number">5.</span> java.lang.NumberFormatException: For input string: <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>같은 날짜를 파싱함에도 불구하고 비정상적으로 파싱이 되는 경우도 있었습니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> : Sat Aug <span class="number">19</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> KST <span class="number">2220</span></span><br><span class="line"><span class="number">0</span> : Thu Aug <span class="number">19</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> KST <span class="number">2021</span></span><br><span class="line"><span class="number">1</span> : Thu Nov <span class="number">19</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> KST <span class="number">2359</span></span><br><span class="line"><span class="number">2</span> : Thu Nov <span class="number">19</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> KST <span class="number">2359</span></span><br><span class="line"><span class="number">3</span> : Thu Nov <span class="number">19</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> KST <span class="number">2359</span></span><br><span class="line"><span class="number">3</span> : Sun Nov <span class="number">19</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> KST <span class="number">2001</span></span><br></pre></td></tr></table></figure>
+
+<p>정확하게 어느포인트에서 문제가 발생하는지 알고싶었지만 stackTrace를 따라서 디버깅도 해보고 했는데 정확하게 어느포인트가 문제인지는 확인하기 어려웠습니다 ㅠㅠ</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">java.lang.NumberFormatException: multiple points</span><br><span class="line">	at sun.misc.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:<span class="number">1890</span>)</span><br><span class="line">	at sun.misc.FloatingDecimal.parseDouble(FloatingDecimal.java:<span class="number">110</span>)</span><br><span class="line">	at java.lang.Double.parseDouble(Double.java:<span class="number">538</span>)</span><br><span class="line">	at java.text.DigitList.getDouble(DigitList.java:<span class="number">169</span>)</span><br><span class="line">	at java.text.DecimalFormat.parse(DecimalFormat.java:<span class="number">2089</span>)</span><br><span class="line">	at java.text.SimpleDateFormat.subParse(SimpleDateFormat.java:<span class="number">1869</span>)</span><br><span class="line">	at java.text.SimpleDateFormat.parse(SimpleDateFormat.java:<span class="number">1514</span>)</span><br><span class="line">	at java.text.DateFormat.parse(DateFormat.java:<span class="number">364</span>)</span><br></pre></td></tr></table></figure>
+
+<h1 id="해결책"><a href="#해결책" class="headerlink" title="해결책"></a>해결책</h1><ol>
+<li><p>가장 간단한건 매번 SimpleDateFormat을 만들어서 사용하는것입니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Date <span class="title">parseDate</span><span class="params">(String date)</span> <span class="keyword">throws</span> ParseException </span>&#123;</span><br><span class="line">        SimpleDateFormat simpleDateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> simpleDateFormat.parse(date);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>synchronized 사용</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(DATE_FORMAT) &#123;</span><br><span class="line">    System.out.println(seq + <span class="string">&quot; : &quot;</span> + DATE_FORMAT.parse(date));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>DateTimeFormatter 사용<br>DateTimeFormatter를 사용하면 LocalDate 형태로 파싱가능하다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy-MM-dd&quot;</span>);</span><br><span class="line">System.out.println(seq + <span class="string">&quot; : &quot;</span> + LocalDate.parse(date, Utils.dateTimeFormatter));</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>위와같은 형태로 위에서 발생한 문제들을 해결할 수 있을것으로 생각된다.</p>
+<h2 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h2><ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://stackoverflow.com/questions/6840803/">https://stackoverflow.com/questions/6840803/</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://knight76.tistory.com/entry/%EB%B3%91%EB%A0%AC-%EC%93%B0%EB%A0%88%EB%93%9C-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%EC%8B%9C-Thread-Safety-%ED%99%95%EC%9D%B8%ED%95%98%EB%8A%94-%EC%8A%B5%EA%B4%80-%EA%B0%96%EA%B8%B0">https://knight76.tistory.com/entry/%EB%B3%91%EB%A0%AC-%EC%93%B0%EB%A0%88%EB%93%9C-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%EC%8B%9C-Thread-Safety-%ED%99%95%EC%9D%B8%ED%95%98%EB%8A%94-%EC%8A%B5%EA%B4%80-%EA%B0%96%EA%B8%B0</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://kldp.org/node/36904">https://kldp.org/node/36904</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.callicoder.com/java-simpledateformat-thread-safety-issues/">https://www.callicoder.com/java-simpledateformat-thread-safety-issues/</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="http://wonwoo.ml/index.php/post/1759">http://wonwoo.ml/index.php/post/1759</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://d2.naver.com/helloworld/645609">https://d2.naver.com/helloworld/645609</a></li>
+</ul>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://kys9261.github.io/2021/08/19/programming/java/simpledateformat-is-thread-unsafe/" data-id="cksixsict000js0up9ym4bpjz" class="article-share-link"><i class="fa fa-share"></i>공유하기</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        <script src="https://utteranc.es/client.js" repo="kys9261/blog-comments" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+</script>
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>팔로우:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="envelope" href="mailto:nser789@gmail.com" target="_blank" rel="external nofollow noopener noreferrer">
+                        <i class="icon fa fa-envelope"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/kys9261" target="_blank" rel="external nofollow noopener noreferrer">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="https://kys9261.github.io/rss.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2020/02/29/mac/mac-spotlight-desont-show-application/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">오래된</strong>
+        <p class="article-nav-title">맥 알프레드(Alfred) 혹은 스폿라이트(Spotlight)에서 앱 검색이 안될때</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">최근 글</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Java/">Java</a></p>
+                            <p class="item-title"><a href="/2021/08/19/programming/java/simpledateformat-is-thread-unsafe/" class="title">SimpleDateFormat은 thread-safe하지 않습니다.</a></p>
+                            <p class="item-date"><time datetime="2021-08-19T04:27:46.000Z" itemprop="datePublished">2021-08-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mac/">Mac</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Mac/Tips/">Tips</a></p>
+                            <p class="item-title"><a href="/2020/02/29/mac/mac-spotlight-desont-show-application/" class="title">맥 알프레드(Alfred) 혹은 스폿라이트(Spotlight)에서 앱 검색이 안될때</a></p>
+                            <p class="item-date"><time datetime="2020-02-29T10:19:54.000Z" itemprop="datePublished">2020-02-29</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Java/">Java</a></p>
+                            <p class="item-title"><a href="/2019/07/10/programming/java/number-literals-can-use-underscore-for-a-punctuation-mark/" class="title">숫자 리터럴에 구분자로 밑줄(_) 사용 가능</a></p>
+                            <p class="item-date"><time datetime="2019-07-10T04:55:42.000Z" itemprop="datePublished">2019-07-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Etc/">Etc</a></p>
+                            <p class="item-title"><a href="/2019/07/03/programming/etc/npm-package-install-from-github/" class="title">NPM 패키지를 Github에서 설치하기</a></p>
+                            <p class="item-date"><time datetime="2019-07-03T14:18:18.000Z" itemprop="datePublished">2019-07-03</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/DevOps/">DevOps</a></p>
+                            <p class="item-title"><a href="/2019/05/22/programming/devops/gitlab-runner-connect-with-sonarqube/" class="title">Gitlab Runner로 SonarQube 분석 자동화 하기</a></p>
+                            <p class="item-date"><time datetime="2019-05-22T02:22:16.000Z" itemprop="datePublished">2019-05-22</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">아카이브</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">8월 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">2월 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">7월 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">5월 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">4월 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">3월 2019</a><span class="archive-list-count">7</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">태그 클라우드</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/GitLab/" style="font-size: 13.33px;">GitLab</a> <a href="/tags/PS/" style="font-size: 10px;">PS</a> <a href="/tags/SonarQube/" style="font-size: 10px;">SonarQube</a> <a href="/tags/alfred/" style="font-size: 10px;">alfred</a> <a href="/tags/backend/" style="font-size: 10px;">backend</a> <a href="/tags/catalina/" style="font-size: 10px;">catalina</a> <a href="/tags/flickering/" style="font-size: 10px;">flickering</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/gitlab-runner/" style="font-size: 10px;">gitlab runner</a> <a href="/tags/googlechart/" style="font-size: 10px;">googlechart</a> <a href="/tags/hackerrank/" style="font-size: 10px;">hackerrank</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/macos/" style="font-size: 10px;">macos</a> <a href="/tags/main/" style="font-size: 10px;">main</a> <a href="/tags/nextstep/" style="font-size: 20px;">nextstep</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/numeric/" style="font-size: 10px;">numeric</a> <a href="/tags/programmers/" style="font-size: 10px;">programmers</a> <a href="/tags/punctuation/" style="font-size: 10px;">punctuation</a> <a href="/tags/runner/" style="font-size: 10px;">runner</a> <a href="/tags/simpledateformat/" style="font-size: 10px;">simpledateformat</a> <a href="/tags/sonarqube/" style="font-size: 10px;">sonarqube</a> <a href="/tags/spotlight/" style="font-size: 10px;">spotlight</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-safe/" style="font-size: 10px;">thread-safe</a> <a href="/tags/tooltip/" style="font-size: 10px;">tooltip</a> <a href="/tags/ubuntu/" style="font-size: 16.67px;">ubuntu</a> <a href="/tags/underscore/" style="font-size: 10px;">underscore</a> <a href="/tags/web/" style="font-size: 10px;">web</a> <a href="/tags/%EA%B0%9C%EB%B0%9C/" style="font-size: 20px;">개발</a> <a href="/tags/%EA%B3%B5%EB%B6%80/" style="font-size: 20px;">공부</a> <a href="/tags/%EA%B5%AC%EA%B8%80%EC%B0%A8%ED%8A%B8/" style="font-size: 10px;">구글차트</a> <a href="/tags/%EB%B0%B1%EC%97%94%EB%93%9C/" style="font-size: 10px;">백엔드</a> <a href="/tags/%EC%86%8C%EB%82%98%ED%81%90%EB%B8%8C/" style="font-size: 10px;">소나큐브</a> <a href="/tags/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/" style="font-size: 10px;">알고리즘</a> <a href="/tags/%EC%98%A8%EB%9D%BC%EC%9D%B8%EC%8A%A4%ED%84%B0%EB%94%94/" style="font-size: 10px;">온라인스터디</a> <a href="/tags/%EC%9E%90%EB%B0%94/" style="font-size: 20px;">자바</a> <a href="/tags/%EC%B1%85/" style="font-size: 20px;">책</a> <a href="/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/" style="font-size: 13.33px;">코딩테스트</a> <a href="/tags/%ED%88%B4%ED%8C%81%EA%B9%9C%EB%B9%A1%EC%9E%84/" style="font-size: 10px;">툴팁깜빡임</a> <a href="/tags/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4/" style="font-size: 10px;">프로그래머스</a> <a href="/tags/%ED%9A%8C%EA%B3%A0/" style="font-size: 10px;">회고</a>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 Mike Kim</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+        
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
