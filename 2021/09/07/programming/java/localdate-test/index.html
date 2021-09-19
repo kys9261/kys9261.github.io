@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="canonical" href="https://kys9261.github.io/2021/09/07/programming/java/localdate-test/">
+    
+
+    
+    <title>LocalDate 테스트 하기 (LocalDate를 mock 해보자) | Mike Kim 개발 블로그</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="java,test,powermock">
+    
+    <meta name="description" content="발단얼마전 LocalDate를 이용한 테스트 케이스를 작성하다가 고민이 생겼습니다.테스트할 함수는 파라미터로 받은 LocalDate를 오늘날짜와 비교하는 함수였는데요 아래는 샘플코드입니다. 12345public boolean isBeforeTarget(LocalDate targetDate) &amp;#123;    &#x2F;&#x2F;작성일 기준으로 LocalDate.now()는">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LocalDate 테스트 하기 (LocalDate를 mock 해보자)">
+<meta property="og:url" content="https://kys9261.github.io/2021/09/07/programming/java/localdate-test/index.html">
+<meta property="og:site_name" content="Mike Kim 개발 블로그">
+<meta property="og:description" content="발단얼마전 LocalDate를 이용한 테스트 케이스를 작성하다가 고민이 생겼습니다.테스트할 함수는 파라미터로 받은 LocalDate를 오늘날짜와 비교하는 함수였는데요 아래는 샘플코드입니다. 12345public boolean isBeforeTarget(LocalDate targetDate) &amp;#123;    &#x2F;&#x2F;작성일 기준으로 LocalDate.now()는">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2021-09-07T10:39:22.000Z">
+<meta property="article:modified_time" content="2021-09-19T07:21:24.362Z">
+<meta property="article:author" content="Mike Kim">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="test">
+<meta property="article:tag" content="powermock">
+<meta name="twitter:card" content="summary">
+    
+
+    
+        <link rel="alternate" href="https://kys9261.github.io/rss.xml" title="Mike Kim 개발 블로그" type="application/atom+xml">
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-45002584-11', 'auto');
+ga('send', 'pageview');
+</script>
+    
+    
+    
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script type="text/javascript">
+(adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-0528563211821066",
+    enable_page_level_ads: true
+});
+</script>
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">To infinity and beyond</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item">
+                                    <a class="main-nav-list-link" href="/">홈</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Mac/">Mac</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Mac/Tips/">Tips</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/">Programming</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Algorithm/">Algorithm</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/DevOps/">DevOps</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Etc/">Etc</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Java/">Java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Life/">Life</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Study/">Study</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item">
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="검색">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '포스트',
+            PAGES: 'Pages',
+            CATEGORIES: '카테고리',
+            TAGS: '태그',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Programming/Java/">Java</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-programming/java/localdate-test" class="article article-single article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        LocalDate 테스트 하기 (LocalDate를 mock 해보자)
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2021/09/07/programming/java/localdate-test/" class="article-date">
+            <time datetime="2021-09-07T10:39:22.000Z" itemprop="datePublished">2021-09-07</time>
+        </a>
+    </div>
+
+		
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="tag-link-link" href="/tags/powermock/" rel="tag">powermock</a>, <a class="tag-link-link" href="/tags/test/" rel="tag">test</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="발단"><a href="#발단" class="headerlink" title="발단"></a>발단</h2><p>얼마전 LocalDate를 이용한 테스트 케이스를 작성하다가 고민이 생겼습니다.<br>테스트할 함수는 파라미터로 받은 LocalDate를 오늘날짜와 비교하는 함수였는데요 아래는 샘플코드입니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBeforeTarget</span><span class="params">(LocalDate targetDate)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//작성일 기준으로 LocalDate.now()는 2021-09-07입니다.</span></span><br><span class="line">    <span class="keyword">return</span> LocalDate.now().isBefore(targetDate);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>날짜를 받고, 오늘 날짜랑 비교해서 오늘날짜가 targetDate 이전이면 true, 이후면 false를 리턴하게 되는데.<br>테스트 코드는 아래와 같습니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Utils utils = <span class="keyword">new</span> Utils();</span><br><span class="line">    </span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">isBeforeTarget</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    LocalDate targetDate = LocalDate.of(<span class="number">2021</span>, <span class="number">9</span>, <span class="number">8</span>);</span><br><span class="line">    assertThat(utils.isBeforeTarget(targetDate), is(<span class="keyword">true</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>작성일 기준으로 오늘은 9월 7일이고, targetDate는 9월 8일이라 오늘은 targetDate 전 입니다. 그래서 true를 반환할거고 이 테스트코드는 통과하게 됩니다.</p>
+<p>여기까지는 별 문제가 없었는데…  </p>
+<p>isBeforeTarget 함수에서 오늘을 기준으로 비교를 하다보니 이 테스트 코드는 내일부터는 fail로 바뀌게 될것입니다.<br>targetDate가 고정이라고 해도 LocalDate.now()가 매일매일 바뀔것이기 때문이죠.<br>그럼 테스트코드에서는 LocalDate.now()의 결과물이 항상 같은 날짜가 나오면 문제가 해결될거 같았습니다.  </p>
+<p>일반적으로 사용되는 @Mock 어노테이션을 이용해 LocalDate를 모킹하고 now 메소드 호출시에 임의의 날짜를 반환하게 작업하면 되겠지 라는 생각이었습니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> LocalDate NOW = LocalDate.of(<span class="number">2021</span>, <span class="number">9</span> ,<span class="number">1</span>); <span class="comment">// [1]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Utils utils = <span class="keyword">new</span> Utils();</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mock</span></span><br><span class="line">LocalDate localDate;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">beforeTarget</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// now 메소드가 호출되면 [1]에서 선언한 고정된 날짜를 반환하게 하고 싶었습니다.</span></span><br><span class="line">    <span class="comment">// static 메소드라 LocalDate.now()를 호출해야하는데 mocking된 객체를 사용해야 할거 같았습니다.</span></span><br><span class="line">    when(localDate.now()).thenReturn(NOW);  </span><br><span class="line"></span><br><span class="line">    LocalDate targetDate = LocalDate.of(<span class="number">2021</span>, <span class="number">9</span>, <span class="number">6</span>);</span><br><span class="line">    assertThat(utils.isBeforeTarget(targetDate), is(<span class="keyword">true</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>아래와 같은 에러가 발생을 했는데요;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">org.mockito.exceptions.misusing.MissingMethodInvocationException: </span><br><span class="line">when() requires an argument which has to be &#x27;a method call on a mock&#x27;.</span><br><span class="line">For example:</span><br><span class="line">    when(mock.getArticles()).thenReturn(articles);</span><br><span class="line"></span><br><span class="line">Also, this error might show up because:</span><br><span class="line">1. you stub either of: final/private/equals()/hashCode() methods.</span><br><span class="line">   Those methods *cannot* be stubbed/verified.</span><br><span class="line">   Mocking methods declared on non-public parent classes is not supported.</span><br><span class="line">2. inside when() you don&#x27;t call method on mock but on some other object.</span><br></pre></td></tr></table></figure>
+
+<p>mockito에서 when 메소드의 인자값으로 ‘호출이 되는 메소드’를 넣어줘야하는데 static 메소드라 정상적으로 메소드를 인식하지 못하는거 같았습니다.</p>
+<p>찾아보니 mockito를 이용해 static 메소드를 직접 모킹하는건 불가능하고 PowerMockito를 이용해야 한다고 나와있었습니다.<br>(&#42; Mockito 3.4.0 이후 버젼에서는 PowerMockito 없이도 static 메소드 모킹이 가능하다고 합니다. <a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.baeldung.com/mockito-mock-static-methods]">참고</a></p>
+<p>&nbsp;<br>&nbsp;    </p>
+<h2 id="PowerMocito를-이용해보자"><a href="#PowerMocito를-이용해보자" class="headerlink" title="PowerMocito를 이용해보자!"></a>PowerMocito를 이용해보자!</h2><p>PowerMocito는 PowerMock의 확장 API라고 합니다. 그래서 PowerMock과 PowerMock API Mockito를 둘다 추가를 해줘야합니다.</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// build.gradle</span></span><br><span class="line">testImplementation <span class="string">&quot;org.powermock:powermock-module-junit4:2.0.9&quot;</span>  </span><br><span class="line">testImplementation <span class="string">&quot;org.powermock:powermock-api-mockito2:2.0.9&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>그리고 테스트 코드 클래스의 제일 상단에 아래 두개의 어노테이션을 추가해줘야합니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith(PowerMockRunner.class)</span>  </span><br><span class="line"><span class="meta">@PrepareForTest(&#123;Utils.class&#125;)</span> <span class="comment">// static 메소드가 호출 되는 클래스를 미리 준비하기 위함 (참고 3번째 링크)</span></span><br></pre></td></tr></table></figure>
+
+<p>기존 테스트코드에 LocalData를 모킹하는 코드를 추가해줍니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> LocalDate NOW = LocalDate.of(<span class="number">2021</span>, <span class="number">9</span> ,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">isBeforeTarget</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    LocalDate targetDate = LocalDate.of(<span class="number">2021</span>, <span class="number">9</span>, <span class="number">8</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Mocking</span></span><br><span class="line">    PowerMockito.mockStatic(LocalDate.class);</span><br><span class="line">    when(LocalDate.now()).thenReturn(NOW);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 클래스를 통째로 mocking하지 않고 원하는 static 메소드만 처리하고 싶은경우</span></span><br><span class="line">    <span class="comment">// PowerMockito.stub(PowerMockito.method(LocalDate.class, &quot;now&quot;)).toReturn(NOW);</span></span><br><span class="line"></span><br><span class="line">    assertThat(utils.isBeforeTarget(targetDate), is(<span class="keyword">true</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>이렇게 하면 언제 실행을 해도 now() 호출했을때 2021년 9월 1일로 고정이 되어서, 테스트코드가 항상 Pass 하는걸 확인 할 수 있습니다.</p>
+<p>사용된 코드는 아주 간단한 예제로 LocalDate의 함수를 이용한 코드를 테스트 하였지만.<br>PowerMockito를 이용하면 다른 static 메소드나, private 메소드도 테스트가 가능할걸로 생각 됩니다.</p>
+<p>&nbsp;<br>&nbsp;</p>
+<h2 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h2><ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.baeldung.com/mockito-mock-static-methods">https://www.baeldung.com/mockito-mock-static-methods</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.baeldung.com/intro-to-powermock">https://www.baeldung.com/intro-to-powermock</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://stackoverflow.com/questions/56430071/what-does-preparefortest-in-powermock-really-mean">https://stackoverflow.com/questions/56430071/what-does-preparefortest-in-powermock-really-mean</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/Aoriseth/mock-LocalDate-now-java">https://github.com/Aoriseth/mock-LocalDate-now-java</a></li>
+</ul>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://kys9261.github.io/2021/09/07/programming/java/localdate-test/" data-id="cktqw82jr0000xhupd04yemd0" class="article-share-link"><i class="fa fa-share"></i>공유하기</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        <script src="https://utteranc.es/client.js" repo="kys9261/blog-comments" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+</script>
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>팔로우:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="envelope" href="mailto:nser789@gmail.com" target="_blank" rel="external nofollow noopener noreferrer">
+                        <i class="icon fa fa-envelope"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/kys9261" target="_blank" rel="external nofollow noopener noreferrer">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="https://kys9261.github.io/rss.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2021/08/19/programming/java/simpledateformat-is-thread-unsafe/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">오래된</strong>
+        <p class="article-nav-title">SimpleDateFormat은 thread-safe하지 않습니다.</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">최근 글</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Java/">Java</a></p>
+                            <p class="item-title"><a href="/2021/09/07/programming/java/localdate-test/" class="title">LocalDate 테스트 하기 (LocalDate를 mock 해보자)</a></p>
+                            <p class="item-date"><time datetime="2021-09-07T10:39:22.000Z" itemprop="datePublished">2021-09-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Java/">Java</a></p>
+                            <p class="item-title"><a href="/2021/08/19/programming/java/simpledateformat-is-thread-unsafe/" class="title">SimpleDateFormat은 thread-safe하지 않습니다.</a></p>
+                            <p class="item-date"><time datetime="2021-08-19T04:27:46.000Z" itemprop="datePublished">2021-08-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mac/">Mac</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Mac/Tips/">Tips</a></p>
+                            <p class="item-title"><a href="/2020/02/29/mac/mac-spotlight-desont-show-application/" class="title">맥 알프레드(Alfred) 혹은 스폿라이트(Spotlight)에서 앱 검색이 안될때</a></p>
+                            <p class="item-date"><time datetime="2020-02-29T10:19:54.000Z" itemprop="datePublished">2020-02-29</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Java/">Java</a></p>
+                            <p class="item-title"><a href="/2019/07/10/programming/java/number-literals-can-use-underscore-for-a-punctuation-mark/" class="title">숫자 리터럴에 구분자로 밑줄(_) 사용 가능</a></p>
+                            <p class="item-date"><time datetime="2019-07-10T04:55:42.000Z" itemprop="datePublished">2019-07-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Etc/">Etc</a></p>
+                            <p class="item-title"><a href="/2019/07/03/programming/etc/npm-package-install-from-github/" class="title">NPM 패키지를 Github에서 설치하기</a></p>
+                            <p class="item-date"><time datetime="2019-07-03T14:18:18.000Z" itemprop="datePublished">2019-07-03</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">아카이브</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">9월 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">8월 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">2월 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">7월 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">5월 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">4월 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">3월 2019</a><span class="archive-list-count">7</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">태그 클라우드</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/GitLab/" style="font-size: 13.33px;">GitLab</a> <a href="/tags/PS/" style="font-size: 10px;">PS</a> <a href="/tags/SonarQube/" style="font-size: 10px;">SonarQube</a> <a href="/tags/alfred/" style="font-size: 10px;">alfred</a> <a href="/tags/backend/" style="font-size: 10px;">backend</a> <a href="/tags/catalina/" style="font-size: 10px;">catalina</a> <a href="/tags/flickering/" style="font-size: 10px;">flickering</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/gitlab-runner/" style="font-size: 10px;">gitlab runner</a> <a href="/tags/googlechart/" style="font-size: 10px;">googlechart</a> <a href="/tags/hackerrank/" style="font-size: 10px;">hackerrank</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/macos/" style="font-size: 10px;">macos</a> <a href="/tags/main/" style="font-size: 10px;">main</a> <a href="/tags/nextstep/" style="font-size: 20px;">nextstep</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/numeric/" style="font-size: 10px;">numeric</a> <a href="/tags/powermock/" style="font-size: 10px;">powermock</a> <a href="/tags/programmers/" style="font-size: 10px;">programmers</a> <a href="/tags/punctuation/" style="font-size: 10px;">punctuation</a> <a href="/tags/runner/" style="font-size: 10px;">runner</a> <a href="/tags/simpledateformat/" style="font-size: 10px;">simpledateformat</a> <a href="/tags/sonarqube/" style="font-size: 10px;">sonarqube</a> <a href="/tags/spotlight/" style="font-size: 10px;">spotlight</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-safe/" style="font-size: 10px;">thread-safe</a> <a href="/tags/tooltip/" style="font-size: 10px;">tooltip</a> <a href="/tags/ubuntu/" style="font-size: 16.67px;">ubuntu</a> <a href="/tags/underscore/" style="font-size: 10px;">underscore</a> <a href="/tags/web/" style="font-size: 10px;">web</a> <a href="/tags/%EA%B0%9C%EB%B0%9C/" style="font-size: 20px;">개발</a> <a href="/tags/%EA%B3%B5%EB%B6%80/" style="font-size: 20px;">공부</a> <a href="/tags/%EA%B5%AC%EA%B8%80%EC%B0%A8%ED%8A%B8/" style="font-size: 10px;">구글차트</a> <a href="/tags/%EB%B0%B1%EC%97%94%EB%93%9C/" style="font-size: 10px;">백엔드</a> <a href="/tags/%EC%86%8C%EB%82%98%ED%81%90%EB%B8%8C/" style="font-size: 10px;">소나큐브</a> <a href="/tags/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/" style="font-size: 10px;">알고리즘</a> <a href="/tags/%EC%98%A8%EB%9D%BC%EC%9D%B8%EC%8A%A4%ED%84%B0%EB%94%94/" style="font-size: 10px;">온라인스터디</a> <a href="/tags/%EC%9E%90%EB%B0%94/" style="font-size: 20px;">자바</a> <a href="/tags/%EC%B1%85/" style="font-size: 20px;">책</a> <a href="/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/" style="font-size: 13.33px;">코딩테스트</a> <a href="/tags/%ED%88%B4%ED%8C%81%EA%B9%9C%EB%B9%A1%EC%9E%84/" style="font-size: 10px;">툴팁깜빡임</a> <a href="/tags/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4/" style="font-size: 10px;">프로그래머스</a> <a href="/tags/%ED%9A%8C%EA%B3%A0/" style="font-size: 10px;">회고</a>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 Mike Kim</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+        
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

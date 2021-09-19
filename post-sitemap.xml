@@ -9,6 +9,14 @@
 
 
     <url>
+        <loc>https://kys9261.github.io/2021/09/07/programming/java/localdate-test/</loc>
+        <lastmod>2021-09-19T07:21:24.362Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://kys9261.github.io/2021/08/19/programming/java/simpledateformat-is-thread-unsafe/</loc>
         <lastmod>2021-08-19T12:56:25.642Z</lastmod>
         <changefreq>weekly</changefreq>
