@@ -113,6 +113,14 @@
     </url>
 
     <url>
+        <loc>https://kys9261.github.io/2019/05/22/programming/devops/gitlab-runner-connect-with-sonarqube/</loc>
+        <lastmod>2020-01-18T17:06:50.938Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://kys9261.github.io/2019/05/02/programming/devops/how-to-install-sonarqube-on-ubuntu/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -122,14 +130,6 @@
 
     <url>
         <loc>https://kys9261.github.io/2019/04/12/programming/devops/how-to-install-gitlab-on-ubuntu/</loc>
-        <lastmod>2020-01-18T17:06:50.938Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://kys9261.github.io/2019/05/22/programming/devops/gitlab-runner-connect-with-sonarqube/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
