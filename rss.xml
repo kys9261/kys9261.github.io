@@ -6,7 +6,7 @@
   <link href="/rss.xml" rel="self"/>
   
   <link href="https://kys9261.github.io/"/>
-  <updated>2021-09-22T09:07:06.709Z</updated>
+  <updated>2021-09-24T06:38:52.249Z</updated>
   <id>https://kys9261.github.io/</id>
   
   <author>
@@ -17,11 +17,46 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>책 클린코드 (1장, 2장)</title>
-    <link href="https://kys9261.github.io/2021/09/22/programming/study/cleancode-book/book-clean-code-01-02/"/>
-    <id>https://kys9261.github.io/2021/09/22/programming/study/cleancode-book/book-clean-code-01-02/</id>
+    <title>책 - 클린코드 (3장)</title>
+    <link href="https://kys9261.github.io/2021/09/23/programming/study/book-cleancode/book-clean-code-03/"/>
+    <id>https://kys9261.github.io/2021/09/23/programming/study/book-cleancode/book-clean-code-03/</id>
+    <published>2021-09-23T08:44:56.000Z</published>
+    <updated>2021-09-24T06:38:52.249Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="3장-함수"><a href="#3장-함수" class="headerlink" title="3장 - 함수"></a>3장 - 함수</h1><h2 id="소감"><a href="#소감" class="headerlink" title="소감"></a>소감</h2><p>안좋은 코드의 사례를 들면서 어떻게 하면 좋은 함수를 작성할 수 있는지에 대해 설명을 하는데 다 읽고나서 생각해보면 결국 앞장에서 나왔던것처럼 ‘읽기좋은 함수가 좋은 코드다’.</p><p>함수는 한 가지의 일만 해야하고, 이름을 잘 지어야하고, 무분별한 인수 사용을 줄여서 함수의 이름과 인수의 이름만으로 무슨 동작을 하는지 알 수 있어야하고, 에러코드 대신 Exception을 사용해 처리하라 등의 방법을 안내하면서 결국 함수를 간단 명료하게 만드는게 좋다! 라는 걸로 결론이 지어지면서 이전에 읽었던 ‘리팩토링’을 번갈아 가면서 보아도 좋을거 같다는 생각을 했습니다.</p><p>  그 책에도 함수를 어떻게 좋은 코드로 리팩토링 할 수있는지, 어떤 함수가 냄새가 나는 코드인지 에 대해 설명이 나와있어서 ‘클린코드’는 추상화 라고 하면 ‘리팩토링’은 구현체 라고 할 수 있지 않을까 생각 해보았습니다.</p><p>&nbsp;<br>&nbsp;  </p><h2 id="강의-내용"><a href="#강의-내용" class="headerlink" title="강의 내용"></a>강의 내용</h2><p>객제지향 설계의 5가지 원칙 - SOLID</p><ul><li>SPR(단일 책임 원칙) : 하나의 클래스는 하나의 책임만 가져야 한다.</li><li>OCP(개방-폐쇄 원칙) : 소프트웨어 요소는 확장에는 열려있으나 변경에는 닫혀 있어야한다.</li><li>LSP(리스코프 치환 원칙) : 서브 타입은 언제나 기반 타입으로 교체할 수 있어야 한다.</li><li>ISP(인터페이스 분리 원칙) : 자신이 사용하지 않는 인터페이스는 구현하지 말아야 한다.</li><li>DIP(의존성 역전 원칙) : 상위 모델은 하위 모델에 의존하면 안된다. 둘 다 추상화에 의존해야한다. 추상화는 세부 사항에 의존해서는 안된다. 세부 사항은 추상화에 따라 달라진다. </li></ul><p>함수 리팩터링</p><ul><li>기능을 구현하는 서투른 함수를 작성한다.</li><li>테스트 코드를 작성한다.</li><li>리팩터링 한다.</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;3장-함수&quot;&gt;&lt;a href=&quot;#3장-함수&quot; class=&quot;headerlink&quot; title=&quot;3장 - 함수&quot;&gt;&lt;/a&gt;3장 - 함수&lt;/h1&gt;&lt;h2 id=&quot;소감&quot;&gt;&lt;a href=&quot;#소감&quot; class=&quot;headerlink&quot; title=&quot;소감&quot;&gt;&lt;
+      
+    
+    </summary>
+    
+      <category term="Programming" scheme="https://kys9261.github.io/categories/Programming/"/>
+    
+      <category term="Study" scheme="https://kys9261.github.io/categories/Programming/Study/"/>
+    
+    
+      <category term="책" scheme="https://kys9261.github.io/tags/%EC%B1%85/"/>
+    
+      <category term="자바" scheme="https://kys9261.github.io/tags/%EC%9E%90%EB%B0%94/"/>
+    
+      <category term="개발" scheme="https://kys9261.github.io/tags/%EA%B0%9C%EB%B0%9C/"/>
+    
+      <category term="공부" scheme="https://kys9261.github.io/tags/%EA%B3%B5%EB%B6%80/"/>
+    
+      <category term="클린코드" scheme="https://kys9261.github.io/tags/%ED%81%B4%EB%A6%B0%EC%BD%94%EB%93%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>책 - 클린코드 (1장, 2장)</title>
+    <link href="https://kys9261.github.io/2021/09/22/programming/study/book-cleancode/book-clean-code-01-02/"/>
+    <id>https://kys9261.github.io/2021/09/22/programming/study/book-cleancode/book-clean-code-01-02/</id>
     <published>2021-09-22T07:29:56.000Z</published>
-    <updated>2021-09-22T09:07:06.709Z</updated>
+    <updated>2021-09-24T05:39:51.049Z</updated>
     
     <content type="html"><![CDATA[<p>항상 개발관련된 서적을 읽어야지 읽어야지 하면서도 사놓고 잘 안읽게 되더라구요.<br>개발 서적 뿐만아니라 책을 읽는게 예전과는 다르게 엄청난 집중력과 노력이 필요하게 되어버렸습니다.</p><p>그래도 제 성장을 위해서는 싫어도 해야한다고 생각을 했었고, 마음은 먹었으나 행동이 따르기는 쉽지 않아서 금융치료를 결정했습니다!</p><p>제로베이스 에서 한달 한권 이라는 테마로 개발서적을 같이 읽는 과정을 진행하더라구요.<br><a href="https://zero-base.co.kr/category_dev_camp/cleancode_1book">클린코드 과정</a></p><p>물론 제가 혼자서 열심히 읽었으면 돈을 아낄수도 있겠지만 스스로가 쉽지 않음을 알기에 수강을 결정했습니다.</p><p>&nbsp;</p><h1 id="1장-깨끗한-코드"><a href="#1장-깨끗한-코드" class="headerlink" title="1장 - 깨끗한 코드"></a>1장 - 깨끗한 코드</h1><h2 id="소감"><a href="#소감" class="headerlink" title="소감"></a>소감</h2><p>1장에서는 나쁜 코드는 무엇이고, 왜 나쁜 코드는 나쁜가. 어떤 코드가 깨끗한 코드인가 에 대한 내용을 다루고 있습니다. 나쁜 코드는 프로젝트의 생산성을 저하시키고, 나아가서는 프로젝트가 실패하는 원인이 될 수 있다고 생각합니다. 사실 회사에서 일을 하면서 내가 짠 코드가 완벽하게 깨끗한 코드가 아님을 알면서도 “시간이 부족해서”, “당장은 중요하지 않아서” 등의 핑계로 나쁜 코드를 짜놓고도 방치하는 경우가 종종 있었고, “나중에 시간날때 리팩토링 해야지” 라고 마음을 먹어도 프로젝트가 종료되면 어느새 머리속에서 잊어버리는 경우가 많았습니다. 책에 나와있듯이 돌아가는 나쁜 코드에 우선 안도감을 가지면서 나중에 정리하겠다고 했지만, 나중은 결코 오지 않는다 라는 얘기가 스스로에게 좀 찔리는 이야기었습니다.</p><p>모든코드를 처음부터 완벽하게 깨끗한 코드로 짜는건 힘들다고 생각합니다. 하지만 처음부터 좀더 고민해보고, 깨끗한 코드를 작성하려는 생각을 가지고 개발을 한다면 더 깨끗한 코드를 작성 할 수 있는 기반이 되지 않을까 생각을 합니다. </p><p>그리고 책에서는 다양한 개발자가 말하는 깨끗한 코드는 무엇인가 에 대해 이야기 하고 있는데. 얘기를 정리해보면 읽기쉽고, 누가 보아도 이해가 되는 코드, 유지보수가 쉽게 되어있는 코드를 깨끗한 코드라고 얘기하는거 같습니다. 내가 작업한 코드가 과연 깨끗한 코드인가에 대한 반성과 함께 이 책을 읽음으로써 앞으로는 좀더 깨끗한 코드를 작성하기 위해 더 적극적인 노력을 해야겠다 라는 생각이 들었습니다.<br>&nbsp;<br>&nbsp;  </p><h2 id="강의-내용"><a href="#강의-내용" class="headerlink" title="강의 내용"></a>강의 내용</h2><p>나쁜코드는 무엇인가?</p><ul><li>성능이 나쁜코드</li><li>의미가 모호한 코드</li><li>중복된 코드</li></ul><p>나쁜 코드가 안좋은 이유</p><ul><li>작은 나쁜 코드가 점점 쌓이면서 프로젝트에 영향을 준다. -&gt; 깨진 유리창 법칙<br>(내가 나쁜 코드를 작성하면, 동료도 내 나쁜 코드를 보고 나쁜 코드를 추가할 가능성이 있다)</li><li>팀의 생산성을 저하시키고, 기술 부채를 만든다</li><li>새로운 시스템을 만들어야 한다 -&gt; 구 시스템의 유지보수와, 신 시스템의 개발을 현실적으로 어렵다(구 시스템의 새로운 요구사항을 신 시스템에도 계속해서 적용해야한다)</li></ul><p>나쁜 코드를 짜는 이유</p><ul><li>일정이 촉박해서</li><li>영향범위가 넓다(사이트 이펙트를 걱정해 소극적으로(?) 개발한다)</li></ul><p>클린코드는 무엇인가?</p><ul><li>효율적인 코드</li><li>한가지를 제대로 하는 코드 -&gt; SRP(단일 책임 원칙)</li><li>읽기 쉬운 코드</li><li>성능이 좋은 코드</li><li>가독성 좋은 코드</li><li>중복이 제거된 코드</li></ul><p>&nbsp;</p><h1 id="2장-의미-있는-이름"><a href="#2장-의미-있는-이름" class="headerlink" title="2장 - 의미 있는 이름"></a>2장 - 의미 있는 이름</h1><h2 id="소감-1"><a href="#소감-1" class="headerlink" title="소감"></a>소감</h2><p>개발하면서 가장 많이 시간을 투자하는 부분이 이름 짓기 입니다.</p><p>변수명, 함수명 등등 개발을 하면서 지어야할 이름이 정말 많은데 이것들이 깨끗한 코드가 진행되는 첫걸음인거 같습니다. 이름만 보았을때 명확하게 이 변수가 어떤값을 가지는지, 함수가 어떤 동작을 하는지 파악하지 못한다면 개발자는 해당 로직을 파악하고, 이 함수가 어디서 호출되는지, 변수의 값은 어디서 할당되는지를 다 파악을 해야해서 사용하는것은 물론 리팩토링 까지도 쉽지 않게 됩니다. </p><p>이 부분을 읽으면서 최근에 읽었던 개발 서적인 마틴 파울러의 ‘리팩터링’에도 코드에서 악취가 나는 사례로 변수나 함수 이름이 명확하지 않을때가 있었던걸로 기억합니다. </p><p>회사에서 일을하면서 변수 이름을 지을때 한글로 먼저 적어두고 그걸 다시 번역기를 돌려서 지을때가 종종 있는데 이러한 경우에도 어떤 단어를 선택하느냐에 따라서 읽는 사람에 따라 의미가 조금은 달라 질 수도 있어서 이름 선택을 신중하게 해야할거 같습니다. </p><p>제가 있는 회사는 은행권이라 은행권에서 사용되는 용어를 정리해놓은 사전 같은게 존재하는데요. 예를들어 특정 코드값이 들어가는 변수명을 Code로 사용하지 않고 cd라고 이름을 정해두고, 모든 개발자가 그 사전에서 정의된 이름을 조합해 변수명을 만들게 되는데요. 물론 모든 개발자들이 공통적인 변수이름을 만드는 부분에서는 좋지만 변수 이름만 보았을때 정확하게 어떤 뜻인지 파악하기 힘들어서 사전을 열어서 검색해보는 불편함도 물론 존재를 합니다. 이 방식이 좋다 나쁘다 판단 하기는 어렵지만 모든 개발자들이 이름을 지을때 공통적으로 사용할 이름사전 같은게 있다면 유지보수나 리팩토링 할때 훨씬더 일괸된 코드를 작성하는데 도움이 될거 같다는 생각을 해보았고. </p><p>저도 제가 작업한 코드중에서 함수명이 조금은 모호한것들, Data, Info같은 뭔가 애매한 이름을 사용해서 클래스, 함수 명을 지었던 경험이 있었어서 앞으로 개발을 하면서는 좀더 명확한 이름을 선택해야겠다 노력을 해야할거 같고, 누구나 다 알것이라고 생각하는 이름의 경우엔 줄여서 쓰는 경우가 종종 있었는데요 예를들어 calculator를 calc라고 적는다던지 하는 경우에도 되도록이면 풀 네임을 적는 습관을 기르도록 노력해야할거 같다는 생각이 들었습니다.</p><h2 id="강의-내용-1"><a href="#강의-내용-1" class="headerlink" title="강의 내용"></a>강의 내용</h2><p>의미가 분명한 이름 짓기</p><ul><li>변수명을 명확하게</li><li>변수들을 클래스로 묶으면 더 뜻이 명확해진다</li><li>루프속에 변수이름도 잘 정하자(fot문에서 int i 보단 명확한 이름으로) -&gt; foreach나 lambda 에서는 변수가 필요 없으니 방식을 변경하는것도 좋을듯</li><li>통일성 있는 단어 사용하기</li><li>변수명에 타입 넣지 않기 (ex. accountArray -&gt; accounts / nameString -&gt; name)</li></ul><p>구글 스타일 가이드 - <a href="https://google.github.io/styleguide/javaguide.html#s5-naming">네이밍</a></p>]]></content>
     
@@ -257,8 +292,8 @@
   
   <entry>
     <title>자바 웹 프로그래밍 Next Step - 4. HTTP 웹 서버 구현을 통해 HTTP 이해하기</title>
-    <link href="https://kys9261.github.io/2019/05/13/programming/study/nextstep-book/java-web-programming-next-step-5/"/>
-    <id>https://kys9261.github.io/2019/05/13/programming/study/nextstep-book/java-web-programming-next-step-5/</id>
+    <link href="https://kys9261.github.io/2019/05/13/programming/study/book-nextstep/java-web-programming-next-step-5/"/>
+    <id>https://kys9261.github.io/2019/05/13/programming/study/book-nextstep/java-web-programming-next-step-5/</id>
     <published>2019-05-13T03:36:25.000Z</published>
     <updated>2020-01-18T17:06:50.941Z</updated>
     
@@ -427,8 +462,8 @@
   
   <entry>
     <title>자바 웹 프로그래밍 Next Step - 3. 개발 환경 구축 및 웹 서버 실습 요구사항</title>
-    <link href="https://kys9261.github.io/2019/04/02/programming/study/nextstep-book/java-web-programming-next-step-4/"/>
-    <id>https://kys9261.github.io/2019/04/02/programming/study/nextstep-book/java-web-programming-next-step-4/</id>
+    <link href="https://kys9261.github.io/2019/04/02/programming/study/book-nextstep/java-web-programming-next-step-4/"/>
+    <id>https://kys9261.github.io/2019/04/02/programming/study/book-nextstep/java-web-programming-next-step-4/</id>
     <published>2019-04-02T11:53:25.000Z</published>
     <updated>2021-08-16T12:29:50.358Z</updated>
     
@@ -463,8 +498,8 @@
   
   <entry>
     <title>자바 웹 프로그래밍 Next Step - 2. 문자열 계산기 구현을 통한 테스트와 리팩토링</title>
-    <link href="https://kys9261.github.io/2019/03/26/programming/study/nextstep-book/java-web-programming-next-step-3/"/>
-    <id>https://kys9261.github.io/2019/03/26/programming/study/nextstep-book/java-web-programming-next-step-3/</id>
+    <link href="https://kys9261.github.io/2019/03/26/programming/study/book-nextstep/java-web-programming-next-step-3/"/>
+    <id>https://kys9261.github.io/2019/03/26/programming/study/book-nextstep/java-web-programming-next-step-3/</id>
     <published>2019-03-26T12:51:34.000Z</published>
     <updated>2020-01-18T17:06:50.940Z</updated>
     
@@ -530,8 +565,8 @@
   
   <entry>
     <title>자바 웹 프로그래밍 Next Step - 두 번째 양파 껍질 벗기기</title>
-    <link href="https://kys9261.github.io/2019/03/20/programming/study/nextstep-book/java-web-programming-next-step-2/"/>
-    <id>https://kys9261.github.io/2019/03/20/programming/study/nextstep-book/java-web-programming-next-step-2/</id>
+    <link href="https://kys9261.github.io/2019/03/20/programming/study/book-nextstep/java-web-programming-next-step-2/"/>
+    <id>https://kys9261.github.io/2019/03/20/programming/study/book-nextstep/java-web-programming-next-step-2/</id>
     <published>2019-03-20T06:53:25.000Z</published>
     <updated>2020-01-18T17:06:50.940Z</updated>
     
@@ -597,8 +632,8 @@
   
   <entry>
     <title>자바 웹 프로그래밍 Next Step - 1. 첫 번째 양파 껍질 벗기기</title>
-    <link href="https://kys9261.github.io/2019/03/14/programming/study/nextstep-book/java-web-programming-next-step-1/"/>
-    <id>https://kys9261.github.io/2019/03/14/programming/study/nextstep-book/java-web-programming-next-step-1/</id>
+    <link href="https://kys9261.github.io/2019/03/14/programming/study/book-nextstep/java-web-programming-next-step-1/"/>
+    <id>https://kys9261.github.io/2019/03/14/programming/study/book-nextstep/java-web-programming-next-step-1/</id>
     <published>2019-03-14T14:41:12.000Z</published>
     <updated>2020-01-18T17:06:50.940Z</updated>
     
@@ -633,8 +668,8 @@
   
   <entry>
     <title>자바 웹 프로그래밍 Next Step - 0. 공부 시작</title>
-    <link href="https://kys9261.github.io/2019/03/13/programming/study/nextstep-book/java-web-programming-next-step-0/"/>
-    <id>https://kys9261.github.io/2019/03/13/programming/study/nextstep-book/java-web-programming-next-step-0/</id>
+    <link href="https://kys9261.github.io/2019/03/13/programming/study/book-nextstep/java-web-programming-next-step-0/"/>
+    <id>https://kys9261.github.io/2019/03/13/programming/study/book-nextstep/java-web-programming-next-step-0/</id>
     <published>2019-03-13T13:56:57.000Z</published>
     <updated>2020-03-14T14:52:22.232Z</updated>
     

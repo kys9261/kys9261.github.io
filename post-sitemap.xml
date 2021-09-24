@@ -9,16 +9,24 @@
 
 
     <url>
-        <loc>https://kys9261.github.io/2020/02/29/mac/mac-spotlight-doesnt-show-application/</loc>
-        <lastmod>2021-09-23T04:21:44.354Z</lastmod>
+        <loc>https://kys9261.github.io/2021/09/23/programming/study/book-cleancode/book-clean-code-03/</loc>
+        <lastmod>2021-09-24T06:38:52.249Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2021/09/22/programming/study/cleancode-book/book-clean-code-01-02/</loc>
-        <lastmod>2021-09-22T09:07:06.709Z</lastmod>
+        <loc>https://kys9261.github.io/2021/09/22/programming/study/book-cleancode/book-clean-code-01-02/</loc>
+        <lastmod>2021-09-24T05:39:51.049Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kys9261.github.io/2020/02/29/mac/mac-spotlight-doesnt-show-application/</loc>
+        <lastmod>2021-09-23T04:21:44.354Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -41,7 +49,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/04/02/programming/study/nextstep-book/java-web-programming-next-step-4/</loc>
+        <loc>https://kys9261.github.io/2019/04/02/programming/study/book-nextstep/java-web-programming-next-step-4/</loc>
         <lastmod>2021-08-16T12:29:50.358Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -49,7 +57,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/03/13/programming/study/nextstep-book/java-web-programming-next-step-0/</loc>
+        <loc>https://kys9261.github.io/2019/03/13/programming/study/book-nextstep/java-web-programming-next-step-0/</loc>
         <lastmod>2020-03-14T14:52:22.232Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -73,7 +81,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/05/13/programming/study/nextstep-book/java-web-programming-next-step-5/</loc>
+        <loc>https://kys9261.github.io/2019/05/13/programming/study/book-nextstep/java-web-programming-next-step-5/</loc>
         <lastmod>2020-01-18T17:06:50.941Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -81,7 +89,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/03/14/programming/study/nextstep-book/java-web-programming-next-step-1/</loc>
+        <loc>https://kys9261.github.io/2019/03/14/programming/study/book-nextstep/java-web-programming-next-step-1/</loc>
         <lastmod>2020-01-18T17:06:50.940Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -89,7 +97,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/03/20/programming/study/nextstep-book/java-web-programming-next-step-2/</loc>
+        <loc>https://kys9261.github.io/2019/03/26/programming/study/book-nextstep/java-web-programming-next-step-3/</loc>
         <lastmod>2020-01-18T17:06:50.940Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -97,7 +105,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/03/26/programming/study/nextstep-book/java-web-programming-next-step-3/</loc>
+        <loc>https://kys9261.github.io/2019/03/20/programming/study/book-nextstep/java-web-programming-next-step-2/</loc>
         <lastmod>2020-01-18T17:06:50.940Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
