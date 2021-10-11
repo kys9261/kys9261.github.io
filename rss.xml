@@ -6,7 +6,7 @@
   <link href="/rss.xml" rel="self"/>
   
   <link href="https://kys9261.github.io/"/>
-  <updated>2021-10-05T14:21:10.706Z</updated>
+  <updated>2021-10-11T10:03:42.890Z</updated>
   <id>https://kys9261.github.io/</id>
   
   <author>
@@ -15,6 +15,41 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>책 - 클린코드 (5장/형식 맞추기)</title>
+    <link href="https://kys9261.github.io/2021/10/11/programming/study/book-cleancode/book-clean-code-05/"/>
+    <id>https://kys9261.github.io/2021/10/11/programming/study/book-cleancode/book-clean-code-05/</id>
+    <published>2021-10-11T09:22:38.000Z</published>
+    <updated>2021-10-11T10:03:42.890Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="5장-형식-맞추기"><a href="#5장-형식-맞추기" class="headerlink" title="5장 - 형식 맞추기"></a>5장 - 형식 맞추기</h1><h2 id="소감"><a href="#소감" class="headerlink" title="소감"></a>소감</h2><p>5장에서는 형식 맞추기로 소개가 되어있지만 가독성 높은 코드를 작성하기 위한 컨벤션 맞추기 라고 봐도 될거 같습니다. 적절한 행의 길이를 맞추고, 변수들끼리 모아두고, 빈 행으로 개념을 분리 하는 등의 방법을 소개하면서 코드를 가독성 높게 만드는 방법을 알려주고 있습니다.</p><p>형식이란건 사실 개발자 개개인에 따라 취향이 확고하게 나뉠 수 있다고 생각이 되는데요<br>아래 코드를 보았을때 저는 1의 형식을 선호하지만 가끔씩 2의 형식을 더 선호하는 사람을 보았습니다.</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// (1)</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// (2)</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">true</span>) </span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>기능상에 문제는 없지만 이런 취향의 차이가 코드에 반영되면 협업을 할때 생산성에 영향이 있을거 같아서 협업을 할때는 컨벤션을 정해두고 그걸 맞춰서 작성하면 좋을거 같습니다.</p><p>제가 일하는 회사에서는 따로 컨벤션을 정해두고 사용하고 있지는 않는데요 일반적으로 다 비슷한 형태의 형식으로 작업이 이뤄지지만 공통의 컨벤션을 적용할 수 있는 방법이 있다면(ex. <a href="https://subicura.com/2016/07/11/coding-convention.html">linter</a> 같은) 좀더 효율성이 좋아지지 않을까 생각을 해보았습니다.</p><p>&nbsp;<br>&nbsp;  </p><h2 id="강의-내용"><a href="#강의-내용" class="headerlink" title="강의 내용"></a>강의 내용</h2><p>포맷팅이 중요한 이유</p><ul><li>가독성에 필수적이다</li></ul><p>클린코드 포맷팅</p><ul><li>적절한 길이 유지</li><li>밀접한 개념은 가까이</li></ul><p>Java Class Declarations</p><ul><li>클래스 선언 순서 (public —&gt; private 순서)</li></ul><p>Team Coding Convention</p><ul><li><a href="https://google.github.io/styleguide/javaguide.html">구글</a></li><li><a href="https://naver.github.io/hackday-conventions-java/">네이버</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;5장-형식-맞추기&quot;&gt;&lt;a href=&quot;#5장-형식-맞추기&quot; class=&quot;headerlink&quot; title=&quot;5장 - 형식 맞추기&quot;&gt;&lt;/a&gt;5장 - 형식 맞추기&lt;/h1&gt;&lt;h2 id=&quot;소감&quot;&gt;&lt;a href=&quot;#소감&quot; class=&quot;headerli
+      
+    
+    </summary>
+    
+      <category term="Programming" scheme="https://kys9261.github.io/categories/Programming/"/>
+    
+      <category term="Study" scheme="https://kys9261.github.io/categories/Programming/Study/"/>
+    
+    
+      <category term="책" scheme="https://kys9261.github.io/tags/%EC%B1%85/"/>
+    
+      <category term="자바" scheme="https://kys9261.github.io/tags/%EC%9E%90%EB%B0%94/"/>
+    
+      <category term="개발" scheme="https://kys9261.github.io/tags/%EA%B0%9C%EB%B0%9C/"/>
+    
+      <category term="공부" scheme="https://kys9261.github.io/tags/%EA%B3%B5%EB%B6%80/"/>
+    
+      <category term="클린코드" scheme="https://kys9261.github.io/tags/%ED%81%B4%EB%A6%B0%EC%BD%94%EB%93%9C/"/>
+    
+  </entry>
   
   <entry>
     <title>책 - 클린코드 (4장/주석)</title>
