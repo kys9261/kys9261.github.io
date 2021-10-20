@@ -9,8 +9,16 @@
 
 
     <url>
+        <loc>https://kys9261.github.io/2020/02/29/mac/mac-spotlight-doesnt-show-application/</loc>
+        <lastmod>2021-10-20T15:01:19.544Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://kys9261.github.io/2021/10/20/programming/life/2021-hacktoberfest/</loc>
-        <lastmod>2021-10-20T14:57:49.255Z</lastmod>
+        <lastmod>2021-10-20T15:01:18.667Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -51,14 +59,6 @@
     <url>
         <loc>https://kys9261.github.io/2021/09/22/programming/study/book-cleancode/book-clean-code-01-02/</loc>
         <lastmod>2021-10-05T11:20:44.857Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://kys9261.github.io/2020/02/29/mac/mac-spotlight-doesnt-show-application/</loc>
-        <lastmod>2021-09-23T04:21:44.354Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -169,14 +169,6 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/05/02/programming/devops/how-to-install-sonarqube-on-ubuntu/</loc>
-        <lastmod>2020-01-18T17:06:50.938Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>https://kys9261.github.io/2019/04/12/programming/devops/how-to-install-gitlab-on-ubuntu/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -185,7 +177,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/03/15/programming/algorithm/codingTest/codingTest-Practise/</loc>
+        <loc>https://kys9261.github.io/2019/05/02/programming/devops/how-to-install-sonarqube-on-ubuntu/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -194,6 +186,14 @@
 
     <url>
         <loc>https://kys9261.github.io/2019/03/21/programming/algorithm/codingTest/hackerrank-codingtest-input/</loc>
+        <lastmod>2020-01-18T17:06:50.938Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kys9261.github.io/2019/03/15/programming/algorithm/codingTest/codingTest-Practise/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
