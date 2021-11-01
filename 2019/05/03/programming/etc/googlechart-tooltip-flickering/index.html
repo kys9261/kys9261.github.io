@@ -21,7 +21,7 @@
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="https://user-images.githubusercontent.com/7028715/57085554-63698780-6d37-11e9-82f6-38ea825f202c.gif">
 <meta property="article:published_time" content="2019-05-03T14:54:01.000Z">
-<meta property="article:modified_time" content="2020-01-18T17:06:50.939Z">
+<meta property="article:modified_time" content="2021-10-29T15:20:46.696Z">
 <meta property="article:author" content="Mike Kim">
 <meta property="article:tag" content="구글차트">
 <meta property="article:tag" content="googlechart">
@@ -222,7 +222,7 @@ ga('send', 'pageview');
 <p>저도 위 문제로 해결책을 찾다가 StackOverflow에 해외의 선배 개발자님께서 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://stackoverflow.com/questions/37902708/google-charts-tooltip-flickering">해결책</a>을 올려주신걸 보았습니다.  </p>
 <p>아주 쉽게 해결을 할 수 있는데요 CSS에 </p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">svg &gt; g &gt; g<span class="selector-pseudo">:last-child</span> &#123; <span class="attribute">pointer-events</span>: none &#125;</span><br></pre></td></tr></table></figure>
-<p>위 코드만 추가해주면 됩니다.<br>pointer-events는 해당 요소에 이벤트를 설청할 수 있는 속성인데 해당부분을 none으로 설정하므로서 이벤트가 발생하지 않게 처리해주는거 같습니다.</p>
+<p>위 코드만 추가해주면 됩니다.<br>pointer-events는 해당 요소에 이벤트를 설정할 수 있는 속성인데 해당부분을 none으로 설정하므로서 이벤트가 발생하지 않게 처리해주는거 같습니다.</p>
 <p>위 CSS를 적용하고 다시 확인하면 기대했던것 처럼 툴팁이 깜빡 거리지 않는걸 확인할 수 있습니다.</p>
 <iframe scrolling="no" width="900" height="500" src="https://jsfiddle.net/tpud4j2q/2/embedded/result,html,css,js/dark" frameborder="0" loading="lazy" allowfullscreen></iframe>
 
@@ -380,8 +380,8 @@ ga('send', 'pageview');
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/life/">life</a></p>
-                            <p class="item-title"><a href="/2021/10/27/programming/life/2021-hacktoberfest/" class="title">2021 핵토버페스트 첫 참가기!</a></p>
-                            <p class="item-date"><time datetime="2021-10-26T15:00:01.000Z" itemprop="datePublished">2021-10-27</time></p>
+                            <p class="item-title"><a href="/2021/10/20/programming/life/2021-hacktoberfest/" class="title">2021 핵토버페스트 첫 참가기!</a></p>
+                            <p class="item-date"><time datetime="2021-10-19T15:00:01.000Z" itemprop="datePublished">2021-10-20</time></p>
                         </div>
                     </li>
                 
@@ -398,7 +398,7 @@ ga('send', 'pageview');
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Study/">Study</a></p>
-                            <p class="item-title"><a href="/2021/10/11/programming/study/book-cleancode/book-clean-code-05/" class="title">책 - 클린코드 (5장/형식 맞추기, 6장/객체와 자료 구조)</a></p>
+                            <p class="item-title"><a href="/2021/10/11/programming/study/book-cleancode/book-clean-code-05-06/" class="title">책 - 클린코드 (5장/형식 맞추기, 6장/객체와 자료 구조)</a></p>
                             <p class="item-date"><time datetime="2021-10-11T09:22:38.000Z" itemprop="datePublished">2021-10-11</time></p>
                         </div>
                     </li>
