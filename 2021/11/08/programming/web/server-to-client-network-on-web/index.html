@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="canonical" href="https://kys9261.github.io/2021/11/08/programming/web/server-to-client-network-on-web/">
+    
+
+    
+    <title>클라이언트와와 서버간 실시간 웹 통신을 하는 방법 | Mike Kim 개발 블로그</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="websocket,http,polling,long polling,ajax">
+    
+    <meta name="description" content="우리가 인터넷을 사용할때는 주로 http 통신을 이용해 서버에 데이터를 요청 합니다. 그럼 서버는 클라이언트의 요청에 맞춰서 데이터를 다시 돌려주곤 하죠.이게 일반적으로 서버와 클라이언트가 데이터를 주고받는 과정입니다. 하지만 여기서 중요한 포인트는 클라이언트의 요청이 있기 전까지는 서버는 어떠한 데이터도 줄 수 없다는 사실입니다. 하지만 채팅같은 서비스의">
+<meta property="og:type" content="article">
+<meta property="og:title" content="클라이언트와와 서버간 실시간 웹 통신을 하는 방법">
+<meta property="og:url" content="https://kys9261.github.io/2021/11/08/programming/web/server-to-client-network-on-web/index.html">
+<meta property="og:site_name" content="Mike Kim 개발 블로그">
+<meta property="og:description" content="우리가 인터넷을 사용할때는 주로 http 통신을 이용해 서버에 데이터를 요청 합니다. 그럼 서버는 클라이언트의 요청에 맞춰서 데이터를 다시 돌려주곤 하죠.이게 일반적으로 서버와 클라이언트가 데이터를 주고받는 과정입니다. 하지만 여기서 중요한 포인트는 클라이언트의 요청이 있기 전까지는 서버는 어떠한 데이터도 줄 수 없다는 사실입니다. 하지만 채팅같은 서비스의">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://user-images.githubusercontent.com/7028715/140646437-3f2721ea-520f-413a-8df2-f52447eb7b78.png">
+<meta property="article:published_time" content="2021-11-08T01:00:00.000Z">
+<meta property="article:modified_time" content="2021-11-08T04:48:38.838Z">
+<meta property="article:author" content="Mike Kim">
+<meta property="article:tag" content="websocket">
+<meta property="article:tag" content="http">
+<meta property="article:tag" content="polling">
+<meta property="article:tag" content="long polling">
+<meta property="article:tag" content="ajax">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/7028715/140646437-3f2721ea-520f-413a-8df2-f52447eb7b78.png">
+    
+
+    
+        <link rel="alternate" href="https://kys9261.github.io/rss.xml" title="Mike Kim 개발 블로그" type="application/atom+xml">
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-45002584-11', 'auto');
+ga('send', 'pageview');
+</script>
+    
+    
+    
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0528563211821066" crossorigin="anonymous"></script>
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">To infinity and beyond</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item">
+                                    <a class="main-nav-list-link" href="/">홈</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Mac/">Mac</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Mac/Tips/">Tips</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/">Programming</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Algorithm/">Algorithm</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/DevOps/">DevOps</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Etc/">Etc</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Java/">Java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Life/">Life</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Study/">Study</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Programming/Web/">Web</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item">
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="검색">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '포스트',
+            PAGES: 'Pages',
+            CATEGORIES: '카테고리',
+            TAGS: '태그',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Programming/Web/">Web</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-programming/web/server-to-client-network-on-web" class="article article-single article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        클라이언트와와 서버간 실시간 웹 통신을 하는 방법
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2021/11/08/programming/web/server-to-client-network-on-web/" class="article-date">
+            <time datetime="2021-11-08T01:00:00.000Z" itemprop="datePublished">2021-11-08</time>
+        </a>
+    </div>
+
+		
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/ajax/" rel="tag">ajax</a>, <a class="tag-link-link" href="/tags/http/" rel="tag">http</a>, <a class="tag-link-link" href="/tags/long-polling/" rel="tag">long polling</a>, <a class="tag-link-link" href="/tags/polling/" rel="tag">polling</a>, <a class="tag-link-link" href="/tags/websocket/" rel="tag">websocket</a>
+    </div>
+
+
+                
+                    <span id="busuanzi_container_page_pv"> 
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span> 
+                
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p>우리가 인터넷을 사용할때는 주로 http 통신을 이용해 서버에 데이터를 요청 합니다. 그럼 서버는 클라이언트의 요청에 맞춰서 데이터를 다시 돌려주곤 하죠.<br>이게 일반적으로 서버와 클라이언트가 데이터를 주고받는 과정입니다. 하지만 여기서 중요한 포인트는 <code>클라이언트의 요청이 있기 전까지는 서버는 어떠한 데이터도 줄 수 없다</code>는 사실입니다.</p>
+<p>하지만 채팅같은 서비스의 경우엔 다른사람이 입력한 내용을 클라이언트가 요청할때만 받아오는게 아니고 계속해서 실시간으로 받아 볼수 있어야 하는데요. 이러한 서비스를 구현하기 위해 다양한 방법들이 존재합니다.</p>
+<p>일반적으로 실시간 통신을 구현하는 방법중에 하나는 단방향 통신을 이용해 실시간으로 데이터를 가져오게 구현하는 방법과, 다른 하나는 양방향 통신을 이용해 서버가 클라이언트로 데이터를 먼저 주는 방식을 사용하는 것입니다. </p>
+<p>단방향 통신을 사용하는 방식에는 대표적으로 Polling, Long Polling, SSE가<br>(Server-Sent Events) 있습니다.</p>
+<h2 id="Polling과-Long-Polling"><a href="#Polling과-Long-Polling" class="headerlink" title="Polling과 Long Polling"></a>Polling과 Long Polling</h2><p><img src="https://user-images.githubusercontent.com/7028715/140646437-3f2721ea-520f-413a-8df2-f52447eb7b78.png" alt="Polling vs Long Polling"><br>출처 : <a target="_blank" rel="external nofollow noopener noreferrer" href="https://hpbn.co/xmlhttprequest/#polling-longpolling">https://hpbn.co/xmlhttprequest/#polling-longpolling</a></p>
+<h2 id="Polling"><a href="#Polling" class="headerlink" title="Polling"></a>Polling</h2><p>폴링 방식은 http 통신을 <code>주기적</code>으로 날려서 서버에서 클라이언트로 전달할 메시지를 빠르게 가져오는 형태입니다.<br>이미지 왼쪽에 표현된 방식이 폴링 인데요. <code>GET /poll</code>을 서버로 계속 날려서 업데이트된 내용이 있는지 주기적으로 체크합니다.</p>
+<p>장점</p>
+<ul>
+<li>구현이 쉽다.(ajax 통신을 주기적으로 요청하는것 만으로도 구현 가능)</li>
+</ul>
+<p>단점</p>
+<ul>
+<li>폴링 주기가 짧으면 서버에 부하가 발생할 수 있다.</li>
+<li>타이밍에 따라 실시간성이 떨어진다.(이미지 처럼 서버의 응답 이후 서버에 업데이트 내용이 발생하면, 클라이언트의 요청이 있기 전까지 업데이트 내용을 전달하지 못하는 상황이 발생한다.)</li>
+</ul>
+<h2 id="Long-Polling"><a href="#Long-Polling" class="headerlink" title="Long Polling"></a>Long Polling</h2><p>롱 폴링은 폴링 방식의 단점을 개선하기 위한 방식인데 클라이언트에서 서버에 요청을 날리면 서버에서 바로 응답이 해주는게 아니고, 업데이트 내용이 생기면 응답을 해주는 방식입니다. 클라에서는 응답을 받으면 다시 서버로 업데이트된 사항을 요청합니다.(업데이트된 내용이 없어서 timeout이 발생했을때도 다시 요청합니다.)</p>
+<p>하지만 업데이트가 빈번하게 발생하는 상황이라면 폴링 방식과 크게 다르지 않기 때문에 데이터 업데이트가 자주 발생하지 않는 상황에서 폴링에 비해 유리하다고 할수 있습니다. </p>
+<p>지금은 어떻게 처리되는지는 모르겠지만 Facebook 채팅이 Long Polling을 이용해 구현되었다고 합니다. <a target="_blank" rel="external nofollow noopener noreferrer" href="http://thedreamping.com/">링크</a></p>
+<p>장점</p>
+<ul>
+<li>폴링에 비해 좀더 실시간에 가까운 통신을 구현할 수 있다.</li>
+</ul>
+<p>단점</p>
+<ul>
+<li>서버에서 응답할 내용이 있을때 까지 커넥션을 유지해야해서 클라이언트의 수 가 많아질경우 서버의 부하가 발생한다.(polling과 유사)</li>
+<li>동시에 많은 수의 연결이 요청되고, 반복되면 서버에 갑작스런 부하가 발생할 수 있다.(ex. 100명이 접속해 채팅을 하면 100개의 request가 동시에 서버로 요청 된다.)</li>
+</ul>
+<h2 id="SSE"><a href="#SSE" class="headerlink" title="SSE"></a>SSE</h2><p><img src="https://user-images.githubusercontent.com/7028715/139591163-a93b21a3-4d44-4545-81a3-5d2652f7ec4a.png" alt="Poling과 SSE, Websock의 통신 흐름"><br>출처 : <a target="_blank" rel="external nofollow noopener noreferrer" href="https://hpbn.co/websocket/#transport-flow">https://hpbn.co/websocket/#transport-flow</a></p>
+<p>SSE는 Server-Sent Events의 약어로 서버와 한번 커넥션을 맺어두면 서버에서 클라이언트로 지속적으로 데이터를 푸시하는 형태로 동작합니다.</p>
+<p>HTML5의 등장과 함께 표준화된 기술입니다. 따라서 IE를 제외한 대부분의 브라우저에서 지원을 하고 있습니다. <a target="_blank" rel="external nofollow noopener noreferrer" href="https://caniuse.com/eventsource">지원 범위</a> </p>
+<p>주기적으로 클라이언트에게 어떤 알림을 처리해야할때 사용하면 좋을거 같습니다. (ex. 키워드 알림, 댓글 알림)</p>
+<h2 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h2><p>위에 소개했던 기술과 다르게 WebSocket은 양방향 통신을 가능하게 해주는 기술입니다. 클라에서도 언제든지 서버로 요청을 날릴 수 있고, 서버에서도 언제든지 클라이언트로 응답을 보낼 수 있습니다.</p>
+<p>WebSocket은 IE를 포함한 거의 모든 브라우저에서 동작하기 때문에 호환성에 대한 걱정을 하지 않아도 됩니다. <a target="_blank" rel="external nofollow noopener noreferrer" href="https://caniuse.com/mdn-api_websocket">지원 범위</a></p>
+<p>장점</p>
+<ul>
+<li>양방향 통신을 구현할 수 있다.</li>
+</ul>
+<p>단점</p>
+<ul>
+<li>다른 방식에 비해 커넥션 비용이 많이 든다.</li>
+</ul>
+<h2 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h2><p>웹 환경에서의 실시간 통신을 구현하는 방식에 대해 간단하게 알아보았습니다. 위 글을 정리하면서 느낀건 ‘어떤 방식이 더 뛰어나다’가 아닌 내가 구현하려는 서비스의 특징과, 서버 상황에 맞는 올바른 기술을 선택하는것이 중요 하다고 생각이 됩니다.</p>
+<h3 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h3><ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://d2.naver.com/helloworld/1052">https://d2.naver.com/helloworld/1052</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://kuimoani.tistory.com/entry/%EC%9B%B9%EC%B1%84%ED%8C%85-%EA%B5%AC%ED%98%84%EC%8B%9C-Long-Polling-%EB%B0%A9%EC%8B%9D%EA%B3%BC-Polling%EB%B0%A9%EC%8B%9D-%EC%84%A0%ED%83%9D%ED%95%98%EA%B8%B0">https://kuimoani.tistory.com/entry/%EC%9B%B9%EC%B1%84%ED%8C%85-%EA%B5%AC%ED%98%84%EC%8B%9C-Long-Polling-%EB%B0%A9%EC%8B%9D%EA%B3%BC-Polling%EB%B0%A9%EC%8B%9D-%EC%84%A0%ED%83%9D%ED%95%98%EA%B8%B0</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://adrenal.tistory.com/20">https://adrenal.tistory.com/20</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://medium.com/@icehongssii/%EA%B9%9C%EC%B0%8D%ED%95%9C-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EB%93%A4%EC%9D%84-%EC%9C%84%ED%95%9C-%EA%B0%84%EB%8B%A8%ED%95%9C-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-%EC%83%81%EC%8B%9D-2-2-http%EB%A5%BC-%EB%84%98%EC%96%B4%EC%84%9C-%EC%8B%A4%EC%8B%9C%EA%B0%84-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9websocket-c49125e1b5a0">https://medium.com/@icehongssii/%EA%B9%9C%EC%B0%8D%ED%95%9C-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EB%93%A4%EC%9D%84-%EC%9C%84%ED%95%9C-%EA%B0%84%EB%8B%A8%ED%95%9C-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-%EC%83%81%EC%8B%9D-2-2-http%EB%A5%BC-%EB%84%98%EC%96%B4%EC%84%9C-%EC%8B%A4%EC%8B%9C%EA%B0%84-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9websocket-c49125e1b5a0</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events">https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://spoqa.github.io/2014/01/20/sse.html">https://spoqa.github.io/2014/01/20/sse.html</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://boxfoxs.tistory.com/403">https://boxfoxs.tistory.com/403</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://hpbn.co/">https://hpbn.co/</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://velog.io/@nomorebuild/SSEServer-Sent-Events-%ED%9B%91%EC%96%B4%EB%B3%B4%EA%B8%B0">https://velog.io/@nomorebuild/SSEServer-Sent-Events-%ED%9B%91%EC%96%B4%EB%B3%B4%EA%B8%B0</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="http://clearpal7.blogspot.com/2016/06/vs.html">http://clearpal7.blogspot.com/2016/06/vs.html</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&amp;blogId=youreme&amp;logNo=110162110369">https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&amp;blogId=youreme&amp;logNo=110162110369</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://velog.io/@hustle-dev/JavaScript-Long-Polling">https://velog.io/@hustle-dev/JavaScript-Long-Polling</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.baeldung.com/spring-server-sent-events">https://www.baeldung.com/spring-server-sent-events</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://boxfoxs.tistory.com/403">https://boxfoxs.tistory.com/403</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events">https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://javacan.tistory.com/entry/spring-webflux-server-sent-event-1">https://javacan.tistory.com/entry/spring-webflux-server-sent-event-1</a></li>
+</ul>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://kys9261.github.io/2021/11/08/programming/web/server-to-client-network-on-web/" data-id="ckvq6po350001qmupddvr7rcx" class="article-share-link"><i class="fa fa-share"></i>공유하기</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        <script src="https://utteranc.es/client.js" repo="kys9261/blog-comments" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+</script>
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>팔로우:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="envelope" href="mailto:nser789@gmail.com" target="_blank" rel="external nofollow noopener noreferrer">
+                        <i class="icon fa fa-envelope"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/kys9261" target="_blank" rel="external nofollow noopener noreferrer">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="https://kys9261.github.io/rss.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2021/10/20/programming/life/2021-hacktoberfest/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">오래된</strong>
+        <p class="article-nav-title">2021 핵토버페스트 첫 참가기!</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">최근 글</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Web/">Web</a></p>
+                            <p class="item-title"><a href="/2021/11/08/programming/web/server-to-client-network-on-web/" class="title">클라이언트와와 서버간 실시간 웹 통신을 하는 방법</a></p>
+                            <p class="item-date"><time datetime="2021-11-08T01:00:00.000Z" itemprop="datePublished">2021-11-08</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Life/">Life</a></p>
+                            <p class="item-title"><a href="/2021/10/20/programming/life/2021-hacktoberfest/" class="title">2021 핵토버페스트 첫 참가기!</a></p>
+                            <p class="item-date"><time datetime="2021-10-19T15:00:01.000Z" itemprop="datePublished">2021-10-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Java/">Java</a></p>
+                            <p class="item-title"><a href="/2021/10/13/programming/java/gson-exclude-field/" class="title">gson에서 필드를 제외하는방법</a></p>
+                            <p class="item-date"><time datetime="2021-10-13T14:18:54.000Z" itemprop="datePublished">2021-10-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Study/">Study</a></p>
+                            <p class="item-title"><a href="/2021/10/11/programming/study/book-cleancode/book-clean-code-05-06/" class="title">책 - 클린코드 (5장/형식 맞추기, 6장/객체와 자료 구조)</a></p>
+                            <p class="item-date"><time datetime="2021-10-11T09:22:38.000Z" itemprop="datePublished">2021-10-11</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Study/">Study</a></p>
+                            <p class="item-title"><a href="/2021/10/05/programming/study/book-cleancode/book-clean-code-04/" class="title">책 - 클린코드 (4장/주석)</a></p>
+                            <p class="item-date"><time datetime="2021-10-05T11:19:50.000Z" itemprop="datePublished">2021-10-05</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">아카이브</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">11월 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">10월 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">9월 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">8월 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">2월 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">7월 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">5월 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">4월 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">3월 2019</a><span class="archive-list-count">6</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">태그 클라우드</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/GitLab/" style="font-size: 12px;">GitLab</a> <a href="/tags/PS/" style="font-size: 10px;">PS</a> <a href="/tags/SonarQube/" style="font-size: 10px;">SonarQube</a> <a href="/tags/ajax/" style="font-size: 10px;">ajax</a> <a href="/tags/alfred/" style="font-size: 10px;">alfred</a> <a href="/tags/backend/" style="font-size: 10px;">backend</a> <a href="/tags/catalina/" style="font-size: 10px;">catalina</a> <a href="/tags/exclude/" style="font-size: 10px;">exclude</a> <a href="/tags/expose/" style="font-size: 10px;">expose</a> <a href="/tags/flickering/" style="font-size: 10px;">flickering</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 12px;">github</a> <a href="/tags/gitlab-runner/" style="font-size: 10px;">gitlab runner</a> <a href="/tags/googlechart/" style="font-size: 10px;">googlechart</a> <a href="/tags/gson/" style="font-size: 10px;">gson</a> <a href="/tags/hackerrank/" style="font-size: 10px;">hackerrank</a> <a href="/tags/hacktoberfest/" style="font-size: 10px;">hacktoberfest</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/long-polling/" style="font-size: 10px;">long polling</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/macos/" style="font-size: 10px;">macos</a> <a href="/tags/main/" style="font-size: 10px;">main</a> <a href="/tags/nextstep/" style="font-size: 18px;">nextstep</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/nonexpose/" style="font-size: 10px;">nonexpose</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/numeric/" style="font-size: 10px;">numeric</a> <a href="/tags/polling/" style="font-size: 10px;">polling</a> <a href="/tags/powermock/" style="font-size: 10px;">powermock</a> <a href="/tags/programmers/" style="font-size: 10px;">programmers</a> <a href="/tags/punctuation/" style="font-size: 10px;">punctuation</a> <a href="/tags/runner/" style="font-size: 10px;">runner</a> <a href="/tags/simpledateformat/" style="font-size: 10px;">simpledateformat</a> <a href="/tags/sonarqube/" style="font-size: 10px;">sonarqube</a> <a href="/tags/spotlight/" style="font-size: 10px;">spotlight</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-safe/" style="font-size: 10px;">thread-safe</a> <a href="/tags/tooltip/" style="font-size: 10px;">tooltip</a> <a href="/tags/ubuntu/" style="font-size: 14px;">ubuntu</a> <a href="/tags/underscore/" style="font-size: 10px;">underscore</a> <a href="/tags/web/" style="font-size: 10px;">web</a> <a href="/tags/websocket/" style="font-size: 10px;">websocket</a> <a href="/tags/%EA%B0%9C%EB%B0%9C/" style="font-size: 20px;">개발</a> <a href="/tags/%EA%B3%B5%EB%B6%80/" style="font-size: 20px;">공부</a> <a href="/tags/%EA%B5%AC%EA%B8%80%EC%B0%A8%ED%8A%B8/" style="font-size: 10px;">구글차트</a> <a href="/tags/%EB%B0%B1%EC%97%94%EB%93%9C/" style="font-size: 10px;">백엔드</a> <a href="/tags/%EC%86%8C%EB%82%98%ED%81%90%EB%B8%8C/" style="font-size: 10px;">소나큐브</a> <a href="/tags/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/" style="font-size: 10px;">알고리즘</a> <a href="/tags/%EC%98%A4%ED%94%88%EC%86%8C%EC%8A%A4/" style="font-size: 10px;">오픈소스</a> <a href="/tags/%EC%98%A8%EB%9D%BC%EC%9D%B8%EC%8A%A4%ED%84%B0%EB%94%94/" style="font-size: 10px;">온라인스터디</a> <a href="/tags/%EC%9E%90%EB%B0%94/" style="font-size: 20px;">자바</a> <a href="/tags/%EC%B1%85/" style="font-size: 20px;">책</a> <a href="/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/" style="font-size: 12px;">코딩테스트</a> <a href="/tags/%ED%81%B4%EB%A6%B0%EC%BD%94%EB%93%9C/" style="font-size: 16px;">클린코드</a> <a href="/tags/%ED%88%B4%ED%8C%81%EA%B9%9C%EB%B9%A1%EC%9E%84/" style="font-size: 10px;">툴팁깜빡임</a> <a href="/tags/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4/" style="font-size: 10px;">프로그래머스</a> <a href="/tags/%ED%95%B5%ED%86%A0%EB%B2%84%ED%8E%98%EC%8A%A4%ED%8A%B8/" style="font-size: 10px;">핵토버페스트</a>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 Mike Kim</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+            
+                <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> 
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

@@ -9,8 +9,8 @@
 
 
     <url>
-        <loc>https://kys9261.github.io/2021/10/11/programming/study/book-cleancode/book-clean-code-05-06/</loc>
-        <lastmod>2021-11-01T14:49:53.797Z</lastmod>
+        <loc>https://kys9261.github.io/2021/11/08/programming/web/server-to-client-network-on-web/</loc>
+        <lastmod>2021-11-08T04:48:38.838Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -18,7 +18,15 @@
 
     <url>
         <loc>https://kys9261.github.io/2021/10/20/programming/life/2021-hacktoberfest/</loc>
-        <lastmod>2021-10-29T15:21:29.366Z</lastmod>
+        <lastmod>2021-11-08T03:08:03.909Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kys9261.github.io/2021/10/11/programming/study/book-cleancode/book-clean-code-05-06/</loc>
+        <lastmod>2021-11-01T14:49:53.797Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
