@@ -9,6 +9,14 @@
 
 
     <url>
+        <loc>https://kys9261.github.io/2021/11/09/programming/playground/long-polling-chatting/</loc>
+        <lastmod>2021-11-08T15:40:16.057Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://kys9261.github.io/2021/11/08/programming/web/server-to-client-network-on-web/</loc>
         <lastmod>2021-11-08T04:49:30.694Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -26,7 +34,7 @@
 
     <url>
         <loc>https://kys9261.github.io/2021/10/11/programming/study/book-cleancode/book-clean-code-05-06/</loc>
-        <lastmod>2021-11-01T14:49:53.797Z</lastmod>
+        <lastmod>2021-11-07T12:51:12.309Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -137,7 +145,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/03/20/programming/study/book-nextstep/java-web-programming-next-step-2/</loc>
+        <loc>https://kys9261.github.io/2019/03/14/programming/study/book-nextstep/java-web-programming-next-step-1/</loc>
         <lastmod>2020-01-18T17:06:50.940Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -145,7 +153,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/03/14/programming/study/book-nextstep/java-web-programming-next-step-1/</loc>
+        <loc>https://kys9261.github.io/2019/03/20/programming/study/book-nextstep/java-web-programming-next-step-2/</loc>
         <lastmod>2020-01-18T17:06:50.940Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -177,14 +185,6 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/04/12/programming/devops/how-to-install-gitlab-on-ubuntu/</loc>
-        <lastmod>2020-01-18T17:06:50.938Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>https://kys9261.github.io/2019/05/02/programming/devops/how-to-install-sonarqube-on-ubuntu/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -193,7 +193,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/03/15/programming/algorithm/codingTest/codingTest-Practise/</loc>
+        <loc>https://kys9261.github.io/2019/04/12/programming/devops/how-to-install-gitlab-on-ubuntu/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -202,6 +202,14 @@
 
     <url>
         <loc>https://kys9261.github.io/2019/03/21/programming/algorithm/codingTest/hackerrank-codingtest-input/</loc>
+        <lastmod>2020-01-18T17:06:50.938Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kys9261.github.io/2019/03/15/programming/algorithm/codingTest/codingTest-Practise/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>

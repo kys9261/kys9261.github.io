@@ -6,7 +6,7 @@
   <link href="/rss.xml" rel="self"/>
   
   <link href="https://kys9261.github.io/"/>
-  <updated>2021-11-08T04:49:30.694Z</updated>
+  <updated>2021-11-08T15:40:16.057Z</updated>
   <id>https://kys9261.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Long Polling으로 구현한 채팅</title>
+    <link href="https://kys9261.github.io/2021/11/09/programming/playground/long-polling-chatting/"/>
+    <id>https://kys9261.github.io/2021/11/09/programming/playground/long-polling-chatting/</id>
+    <published>2021-11-08T15:00:00.000Z</published>
+    <updated>2021-11-08T15:40:16.057Z</updated>
+    
+    <content type="html"><![CDATA[<p>지난번에 Polling과 Long Polling을 구현한 <a href="https://kys9261.github.io/2021/11/08/programming/playground/polling-and-long-polling/">간단한 샘플</a>을 만들어 보았습니다. </p><p>그런데 Long Polling의 샘플이 좀 아쉬운거 같았습니다. 그때는 서버가 5초 뒤 응답을 해주는 형태로 구현을 했는데 사실 </p><div class="video-container"><iframe src="https://www.youtube.com/embed/Pmkdb2P3MDY" frameborder="0" loading="lazy" allowfullscreen></iframe></div>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;지난번에 Polling과 Long Polling을 구현한 &lt;a href=&quot;https://kys9261.github.io/2021/11/08/programming/playground/polling-and-long-polling/&quot;&gt;간단한 샘플&lt;/a
+      
+    
+    </summary>
+    
+      <category term="Programming" scheme="https://kys9261.github.io/categories/Programming/"/>
+    
+      <category term="Playground" scheme="https://kys9261.github.io/categories/Programming/Playground/"/>
+    
+    
+      <category term="Long Polling" scheme="https://kys9261.github.io/tags/Long-Polling/"/>
+    
+      <category term="chatting" scheme="https://kys9261.github.io/tags/chatting/"/>
+    
+      <category term="채팅" scheme="https://kys9261.github.io/tags/%EC%B1%84%ED%8C%85/"/>
+    
+  </entry>
   
   <entry>
     <title>클라이언트와 서버간 실시간 통신을 하는 방법</title>
@@ -122,7 +153,7 @@
     <link href="https://kys9261.github.io/2021/10/11/programming/study/book-cleancode/book-clean-code-05-06/"/>
     <id>https://kys9261.github.io/2021/10/11/programming/study/book-cleancode/book-clean-code-05-06/</id>
     <published>2021-10-11T09:22:38.000Z</published>
-    <updated>2021-11-01T14:49:53.797Z</updated>
+    <updated>2021-11-07T12:51:12.309Z</updated>
     
     <content type="html"><![CDATA[<h1 id="5장-형식-맞추기"><a href="#5장-형식-맞추기" class="headerlink" title="5장 - 형식 맞추기"></a>5장 - 형식 맞추기</h1><h2 id="소감"><a href="#소감" class="headerlink" title="소감"></a>소감</h2><p>5장에서는 형식 맞추기로 소개가 되어있지만 가독성 높은 코드를 작성하기 위한 컨벤션 맞추기 라고 봐도 될거 같습니다. 적절한 행의 길이를 맞추고, 변수들끼리 모아두고, 빈 행으로 개념을 분리 하는 등의 방법을 소개하면서 코드를 가독성 높게 만드는 방법을 알려주고 있습니다.</p><p>형식이란건 사실 개발자 개개인에 따라 취향이 확고하게 나뉠 수 있다고 생각이 되는데요<br>아래 코드를 보았을때 저는 1의 형식을 선호하지만 가끔씩 2의 형식을 더 선호하는 사람을 보았습니다.</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// (1)</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// (2)</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">true</span>) </span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>기능상에 문제는 없지만 이런 취향의 차이가 코드에 반영되면 협업을 할때 생산성에 영향이 있을거 같아서 협업을 할때는 컨벤션을 정해두고 그걸 맞춰서 작성하면 좋을거 같습니다.</p><p>제가 일하는 회사에서는 따로 컨벤션을 정해두고 사용하고 있지는 않는데요 일반적으로 다 비슷한 형태의 형식으로 작업이 이뤄지지만 공통의 컨벤션을 적용할 수 있는 방법이 있다면(ex. <a href="https://subicura.com/2016/07/11/coding-convention.html">linter</a> 같은) 좀더 효율성이 좋아지지 않을까 생각을 해보았습니다.</p><p>&nbsp;<br>&nbsp;  </p><h2 id="강의-내용"><a href="#강의-내용" class="headerlink" title="강의 내용"></a>강의 내용</h2><p>포맷팅이 중요한 이유</p><ul><li>가독성에 필수적이다</li></ul><p>클린코드 포맷팅</p><ul><li>적절한 길이 유지</li><li>밀접한 개념은 가까이</li></ul><p>Java Class Declarations</p><ul><li>클래스 선언 순서 (public —&gt; private 순서)</li></ul><p>Team Coding Convention</p><ul><li><a href="https://google.github.io/styleguide/javaguide.html">구글</a></li><li><a href="https://naver.github.io/hackday-conventions-java/">네이버</a></li></ul><p>&nbsp;<br>&nbsp;<br>&nbsp;  </p><h1 id="6장-객체와-자료-구조"><a href="#6장-객체와-자료-구조" class="headerlink" title="6장 - 객체와 자료 구조"></a>6장 - 객체와 자료 구조</h1><h2 id="소감-1"><a href="#소감-1" class="headerlink" title="소감"></a>소감</h2><p>클래스를 만들때 객체지향적으로 생각해서 필드와 클래스를 만드는데 단순히 조회와 설정 함수만 가지고 있는 클래스를 많이 만들었던거 같습니다. 객체지향의 개념은 알고있지만 그걸 제대로 구현하는것은 쉽지 않다는 생각을 했습니다. 책에 나오는 디미터의 법칙과, 기차 충돌에 대한 내용을 읽으면서 ‘나도 저런 코드 작성한적이 있었던거 같은데?’라는 생각도 많이 했습니다. 객체와 자료구조를 구분해서 작성해야하는데 거의 대부분 자료 전달 객체인 형태로(DTO)로 많이 구현했던거 같았습니다. private 필드와 public getter,setter를 습관적으로 만들면서, 기차충돌 형태의 코드가 발생하게끔 만들었던거 같았습니다.</p><h2 id="강의내용"><a href="#강의내용" class="headerlink" title="강의내용"></a>강의내용</h2><p>자료구조 vs 객체</p><ul><li>자료구조 : 데이터 그 자체(조회와 설정만)</li><li>객체 : 비지니스 로직 관련(자료는 숨기고, 추상화된 함수만)   </li></ul><p>객체 - 디미터 법칙</p><ul><li><p>클래스 C의 메서드 f는 다음과 같은 객체의 메서드만 호출해야한다.  </p><ul><li>클래스C  </li><li>자신이 생성한 객체  </li><li>자신의 인수로 넘어온 객체  </li><li>C 인스턴스 변수에 저장된 객체  </li></ul></li><li><p>기차 충돌</p></li></ul><p>DTO</p><ul><li>로직없이 필드만 갖는다</li><li>getter/setter</li></ul><p>Active Record</p><ul><li>Database row를 객체에 맵핑하는 패턴</li><li>Active Record vs Data Mapper<ul><li>Active Record : row + db 접근을 포함 (ROR)</li><li>Data Mapper : row / db 접근 분리 (Hibernate)</li></ul></li></ul>]]></content>
     
@@ -726,9 +757,9 @@
       <category term="Algorithm" scheme="https://kys9261.github.io/categories/Programming/Algorithm/"/>
     
     
-      <category term="코딩테스트" scheme="https://kys9261.github.io/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/"/>
-    
       <category term="hackerrank" scheme="https://kys9261.github.io/tags/hackerrank/"/>
+    
+      <category term="코딩테스트" scheme="https://kys9261.github.io/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/"/>
     
       <category term="main" scheme="https://kys9261.github.io/tags/main/"/>
     
