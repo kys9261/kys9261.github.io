@@ -10,7 +10,15 @@
 
     <url>
         <loc>https://kys9261.github.io/2021/11/09/programming/playground/long-polling-chatting/</loc>
-        <lastmod>2021-11-08T15:40:16.057Z</lastmod>
+        <lastmod>2021-11-08T16:46:30.863Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kys9261.github.io/2021/11/08/programming/playground/polling-and-long-polling-sample/</loc>
+        <lastmod>2021-11-08T15:40:45.278Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
