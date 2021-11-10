@@ -6,7 +6,7 @@
   <link href="/rss.xml" rel="self"/>
   
   <link href="https://kys9261.github.io/"/>
-  <updated>2021-11-09T02:07:53.119Z</updated>
+  <updated>2021-11-10T17:28:42.306Z</updated>
   <id>https://kys9261.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>네이버 스포츠 실시간 응원 클론하기 - 분석</title>
+    <link href="https://kys9261.github.io/2021/11/11/programming/playground/naver-sports-cheering-clone-1/"/>
+    <id>https://kys9261.github.io/2021/11/11/programming/playground/naver-sports-cheering-clone-1/</id>
+    <published>2021-11-10T17:24:39.000Z</published>
+    <updated>2021-11-10T17:28:42.306Z</updated>
+    
+    <content type="html"><![CDATA[<p>최근 가을야구가 진행되고 있는 와중에 오랜만에 네이버에서 야구 중계를 봤는데요.<br>페이지 왼쪽 상단에 응원하는 팀을 선택하는 영역의 숫자가 실시간으로 바뀌는게 눈에 들어왔습니다. 갑자기 해당 기능이 어떻게 동작하는지 궁금해졌습니다. <del>쓸데없는 호기심 발동!</del></p><p><img src="https://user-images.githubusercontent.com/7028715/141162632-14d01ae1-00f2-48f1-8b42-352c1a68ddf3.png" alt="네이버 스포츠 응원팀 선택하기"></p><p>그래서 자연스럽게 크롬 개발자 콘솔을 열어서 통신이 어떻게 진행되고 있는지 보았는데요. </p><p><img src="https://user-images.githubusercontent.com/7028715/141098588-447cb15e-e733-4a6f-b6ab-c6bb0147cf8c.png" alt="엄청난 양의 네트워크 요청"></p><p>그래서 저 데이터를 다 확인하기보다는 예상으로는 API로 데이터를 받아올거 같아서 <code>Fetch/XHR</code> 탭을 눌러서 데이터를 확인해보았습니다. </p><p>근데 이상한점이 있었던게 데이터가 주기적으로 변경되는거면 API 호출 기록이 지속적으로 추가 됐을거 같은데 추가되는 네트워크 요청은 영상 스트리밍 관련된 요청이었고, 그 전에 요청된 데이터에는 응원 갯수를 노출시켜줄만한 데이터는 안보였습니다.</p><p>그래서 저 데이터가 자바스크립트를 이용해 임의로 만든게 아닐까 하는 의심을 해보았습니다. 네이버가 그렇게 대충 구현하지는 않았을거 같지만 정확하게 데이터를 어떻게 가져오는지 모르는 상황이라 그런 생각이 들었습니다.</p><p><code>JS</code>탭을 눌러서 뭔가 저 기능에 영향이 있을법한 코드가 있는지 찾아보던 와중에 </p><p><img src="https://user-images.githubusercontent.com/7028715/141100348-8e153d9d-c17f-4d60-8383-f93c3a597761.png" alt="의심이 가는 부분을 찾았다"></p><p>의심이 가는 이름이 있는 요청을 찾았습니다. 뭔가 <code>sportsLike</code>라는 이름이 저 기능과 어울리는거 같은데? 라는 생각이 들었씁니다.</p><p>두개의 요청중 처음은 인증을 위한 토큰을 받아오고 있었고, 두번째 요청이 제가 원하는 데이터랑 부합했습니다.</p><p><img src="https://user-images.githubusercontent.com/7028715/141102111-44b69571-313e-4540-b8c8-0d4ca0227aab.png" alt="응원과 관련된 데이터!"></p><p>제일 상단의 빨간의 <code>contentsId</code>는 해당 경기의 ID 같았습니다. </p><p><img src="https://user-images.githubusercontent.com/7028715/141102339-b2168c0a-19db-43fb-9682-0b5332edd240.png" alt="중계페이지 URL에도 있다!"></p><p>중계 페이지 URL에도 <code>contentsId</code>와 동일한 값이 있었습니다.</p><p>그 다음 빨간박스의 <code>reactions</code>가 실제 응원 갯수를 초기화 해주는 데이터 같았습니다. 여러개의 필드가 있었지만 다른건 어떨때 사용되는지 정확히는 모르겠고, 우선 <code>noLimit</code>의 <code>count</code>가 처음 설정될 응원 갯수고, <code>userCount</code>는 제가 누른 수를 의미하는거 같았습니다.<br>응원 버튼을 누를때마다 저 카운트가 올라가는것을 확인했습니다.</p><p>우선은 저렇게 데이터를 확인했는데 아직 해소가 되지 않은 의문이 있습니다. 바로 <code>실시간으로 바뀌는 응원수는 어디서 오는것인가?</code>였는데요 제가 모르는 다른 데이터가 있을거 같아서 네트워크 탭의 다른 항목들을 뒤쳐보기로 했습니다.</p><p>그중에 <code>WS</code>탭에 갔는데 웹소켓 요청이 1개 있었습니다.</p><p><img src="https://user-images.githubusercontent.com/7028715/141103378-ea236fc4-609e-4529-9e5a-66d58fbecb7e.png" alt="웹소켓 요청이 1개 있다?!"></p><p>웹소켓 요청이 있었다는걸 알게된 순간 <code>아! 웹소켓을 이용해 실시간 통신을 하고 있었구나!</code>라고 생각했습니다.</p><p>요청 URL 확인해서 얻은 정보가 있는데 <code>프로토콜은 wss</code>로 https와 같이 인증서 처리가 된 프로토콜 입니다.<br><code>URL에 socket.io</code>가 있는걸로 보아서 socket.io로 구현이 된거 같습니다. 그리고 쿼리스트링에 EIO=3, transport=websocket 두개의 데이터가 있는데 <code>EIO=3은 Engine.io 버젼이 3</code>이라는 뜻이고,<br><code>transport=websocket은 websocket으로 통신하겠다</code>는 의미입니다. <a href="https://socket.io/docs/v4/client-options/#query">참고</a></p><p>자세한 내용은 Websocket과 socket.io를 정리하면서 다시한번 다루겠습니다.</p><p><img src="https://user-images.githubusercontent.com/7028715/141105436-8d324a5d-e58f-4384-9198-e94f1e943637.png" alt="요청 URL로 정보를 얻었다!"></p><p>아래 이미지가 실제로 서버랑 데이터를 주고받는 데이터인데요.<br>가볍게 한번 살펴보도록 하겠습니다.</p><p><img src="https://user-images.githubusercontent.com/7028715/141105549-65140f56-2f2a-4235-896a-3b93b28289d6.png" alt="스크린샷 2021-11-10 오후 8 26 14"></p><p>실제로 데이터를 주고받는걸 보면 왼쪽의 빨간색 화살표는 서버 to 클라이언트, 파란색 화살표는 클라이언트 to 서버 데이터를 표현하는 것입니다.</p><p>데이터 패킷은 정해진 타입과 페이로드로 나누는데요 </p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2[&quot;test&quot;,42]</span><br><span class="line">||</span><br><span class="line">|└─ JSON-encoded payload</span><br><span class="line">└─ packet type (2 =&gt; EVENT)</span><br></pre></td></tr></table></figure><p>패킷타입이 숫자로 되어있는데 1개나 2개냐에 따라 조금 다른데요<br>1개 일경우엔 <a href="https://github.com/socketio/engine.io-protocol#packet">Engine.io의 패킷타입</a>이고, 2개일땐 앞자리는 Engine.io의 패킷타입, 뒷자리는 <a href="https://github.com/socketio/socket.io-protocol#packet-types">Socket.io의 패킷타입</a> 입니다.</p><p>각 숫자가 의마하는 바가 다르니 알고 있으면 데이터 분석에 도움이 될거 같습니다.</p><ul><li>Engine.io와 Socket.io의 차이에 대해서는 나중에 포스팅 하겠습니다.</li></ul><table><thead><tr><th>데이터</th><th>설명</th></tr></thead><tbody><tr><td>⬇️ 0{…}</td><td>0:open -&gt; Engine.io 서버로부터 새로운 통신을 시작한다는 데이터를 받습니다.</td></tr><tr><td>⬇️ 40</td><td>4:message / 0:open -&gt; <a href="https://socket.io/docs/v4/namespaces/">namespace</a> 연결 요청입니다.</td></tr><tr><td>⬆️ 42[“join”, {….}]</td><td>4:message / 2:event -&gt; 서버 join 이벤트 발생.</td></tr><tr><td>⬇️ 42[“cheer”, {….}]</td><td>4:message / 2:cheer -&gt; 클라이언트 cheer 이벤트 발생.</td></tr><tr><td>⬆️ 2</td><td>2:ping -&gt; 서버로 ping</td></tr><tr><td>⬇️ 3</td><td>3:pong -&gt; 서버로부터 pong</td></tr></tbody></table><p>간단하게 설명했는데 자세한 내용은 <a href="https://github.com/socketio/socket.io-protocol#sample-session">공식 문서</a>를 확인하시면 더 좋을거 같습니다.</p><p>네이버는 위와 같은 형태로 데이터를 주고받는데요. EIO가 3일때 해당하는 얘기고, EIO=4가 현재 최신 버젼인데 조금 차이가 있습니다.</p><p>우선 서버와 클라간 응답을 체크하는 2(ping), 3(pong)의 순서가<br>Engine.io v3일땐 클라(ping) -&gt; 서버(pong)이었는데, Engine.io v4부터는 서버(ping) -&gt; 클라(pong)으로 변경되었습니다. <a href="https://github.com/socketio/engine.io-protocol#difference-between-v3-and-v4">참고</a></p><p>주기적으로 ping, pong을 하는 이유는 서버와 클라간에 <a href="https://github.com/socketio/socket.io-protocol#sample-session">통신이 지속적으로 가능한지 확인</a>하는 목적인데 클라이언트에서 ping을 요청하는 주기에 대한 신뢰성이 떨어진다고 합니다. timeout의 발생원인이 클라이언트 측에서의 타이머 지연이라고 판단하는거 같습니다.</p><ul><li>ping을 날리는 주기와 타임아웃시간은 맨처음 통신을 맺을때 데이터에 포함되어있습니다.(pingInterval, pingTimeout)</li></ul><p>네이버에서 구현할땐 Engine.io v3를 사용하였고, 업데이트를 진행한거 같지 않지만 Engine.io v3와 Engine.io v4의 기능이나 성능적인 차이가 크게 없는거 같아서 큰 문제는 없을거 같습니다.</p><ul><li>Engine.io버젼과 Socket.io의 버젼은 별개입니다.</li></ul><p>지금까지 제가 분석한 내용을 도식화 하면 아래와 같은데요<br>JS탭에 있었던 첫번째 요청과 관련된 내용(인증토큰 처리)은 제외했습니다.</p><p><img src="https://user-images.githubusercontent.com/7028715/141153873-1f7b885d-291a-4a6f-86d9-2001a08b38fb.png"></p><p>그리고 웹소켓 연결 요청은 점선으로 되어있는데요. socket.io의 기본적인 연결은 Long Polling으로 부터 시작합니다. Long Polling을 이용해 서버와 websocket 통신이 가능한지 먼저 체크를 하고, 통신이 가능하면 웹소켓으로 통신 방식을 <a href="https://socket.io/docs/v4/how-it-works/#upgrade-mechanism">업그레이드</a> 합니다.</p><p>그렇게 될경우 네트워크 요청 목록에 아래와 같이 5개의 요청이 발생하게 됩니다.</p><p><img src="https://socket.io/assets/images/network-monitor-2e47dbe233100aa290595f8687a9fcba.png" alt="일반적인 socket.io 연결 요청 목록"></p><p>하지만 네이버 스포츠 페이지에서 본 요청 목록엔 websocket연결 뿐이었는데요 (4번째 요청),<br>클라이언트 쪽에서 소켓 요청을 할때 option값 중에 <a href="https://socket.io/docs/v4/client-options/#transports">transports를 websocket</a>으로만 설정하면<br>Long Polling을 이용한 연결을 비활성화 합니다. 그래서 1개의 요청만 남아있는것입니다.</p><p>다만 Long Polling을 비활성화는 이유에 대해서 정확하게 이해는 못했는데요, <a href="https://socket.io/docs/v4/using-multiple-nodes/">공식 문서</a>를 보았을때는 여러 Socket.io 서버를 구성해서 사용할때 여러개의 Long Polling요청이 각기 다른 서버로 전송될 경우 세션ID (sid)를 식별하지 못하는 문제가 발생을 하게됩니다. 그래서 서버와 클라이언트간 1:1로 연결(<a href="https://socket.io/docs/v4/using-multiple-nodes/#enabling-sticky-session">고정세션</a>)을 시키기 위해 Long Polling을 이용하지 않고 websocket을 이용해 연결을 시도하는것이고, 어떤 서버에 연결될지는 로드밸런싱 솔루션을 이용해 처리를 해야한다고 하는거 같았습니다. </p><p>마지막으로 제가 응원하는 팀을 클릭했을때도 JSONP를 이용해 데이터를 보내고 callback을 통해 데이터를 받아와 처리하는것 같이 보였습니다.<br><img src="https://user-images.githubusercontent.com/7028715/141160901-ec386931-2f32-4948-9039-a996f90c93d0.png" alt="팀 응원 - 요청 값"></p><p>요청값 중에 <code>pool이 nolimit</code>인걸 보아하니 투표수에 제한이 없는거 같고, 응답 필드의 <code>nolimitUserCount가 3</code>으로 제가 지금까지 눌렀던 횟수의 총합이 응답으로 오는거 같았습니다.</p><p><img src="https://user-images.githubusercontent.com/7028715/141160896-cdd83041-9d4a-4d3d-b997-0e126acc9f54.png" alt="팀 응원 - 응답 값"></p><p>투표는 로그인을 해야 진행이 되기때문에 로그인한 유저의 정보를 이용해 투표한 기록을 가지고 있는거 같았습니다.</p><h2 id="궁금증"><a href="#궁금증" class="headerlink" title="궁금증"></a>궁금증</h2><p>이 글을 적으면서도 이해가 안되는 부분은 <code>왜 JS로 데이터 초기값을 요청했을까?</code> 라는 부분 입니다.</p><p>뭔가 응답값을 보았을때 callback으로 감싸져서 오는걸 보아하니 JSONP로 요청을 한거 같은데. 제가 알기론 JSONP는 CORS문제를 해결하기위해 사용한다 인데요. JSONP로 요청하지 않고 서버에서 Response Header에 Access-Control-Allow-Headers를 설정하거나, 서브도메인은 naver.com으로 같으므로 document.domain을 이용한 처리도 가능하지 않았을까 생각이 됩니다. (document.domain은 더이상 사용하지 않는게 좋다 라고 하네요. <a href="https://runebook.dev/en/docs/dom/document/domain">참고</a></p><p>아니면 네이버 스포츠를 개발하는 팀과, socket.io 서버를 개발하는 팀이 달라서 뭔가 socket.io 개발팀에서 JSONP를 이용해 도메인이 다른 팀에서도 사용해서 처리할 수 있게끔 callback으로 감싸서 내려주는 공통화 처리를 해둔게 아닐까 라는 생각도 해보았습니다. (응답의 구조를 보아하니 스포츠 경기 뿐만 아니라, 다른 곳에서도 사용이 가능한 공통 응원(투표) 시스템이지 않을까 라는 추측…)</p><p>다음 포스팅은 요구사항을 리스트업 하고, 설계를 해보는 작업을 해보도록 하겠습니다.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;최근 가을야구가 진행되고 있는 와중에 오랜만에 네이버에서 야구 중계를 봤는데요.&lt;br&gt;페이지 왼쪽 상단에 응원하는 팀을 선택하는 영역의 숫자가 실시간으로 바뀌는게 눈에 들어왔습니다. 갑자기 해당 기능이 어떻게 동작하는지 궁금해졌습니다. &lt;del&gt;
+      
+    
+    </summary>
+    
+      <category term="Programming" scheme="https://kys9261.github.io/categories/Programming/"/>
+    
+      <category term="Playground" scheme="https://kys9261.github.io/categories/Programming/Playground/"/>
+    
+    
+      <category term="websocket" scheme="https://kys9261.github.io/tags/websocket/"/>
+    
+      <category term="socket.io" scheme="https://kys9261.github.io/tags/socket-io/"/>
+    
+      <category term="네이버 스포츠 응원" scheme="https://kys9261.github.io/tags/%EB%84%A4%EC%9D%B4%EB%B2%84-%EC%8A%A4%ED%8F%AC%EC%B8%A0-%EC%9D%91%EC%9B%90/"/>
+    
+  </entry>
   
   <entry>
     <title>Long Polling으로 구현한 채팅</title>
@@ -71,9 +102,9 @@
       <category term="Playground" scheme="https://kys9261.github.io/categories/Programming/Playground/"/>
     
     
-      <category term="Polling" scheme="https://kys9261.github.io/tags/Polling/"/>
-    
       <category term="Long Polling" scheme="https://kys9261.github.io/tags/Long-Polling/"/>
+    
+      <category term="Polling" scheme="https://kys9261.github.io/tags/Polling/"/>
     
   </entry>
   
@@ -787,9 +818,9 @@
       <category term="Algorithm" scheme="https://kys9261.github.io/categories/Programming/Algorithm/"/>
     
     
-      <category term="hackerrank" scheme="https://kys9261.github.io/tags/hackerrank/"/>
-    
       <category term="코딩테스트" scheme="https://kys9261.github.io/tags/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8/"/>
+    
+      <category term="hackerrank" scheme="https://kys9261.github.io/tags/hackerrank/"/>
     
       <category term="main" scheme="https://kys9261.github.io/tags/main/"/>
     

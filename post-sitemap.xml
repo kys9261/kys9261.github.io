@@ -9,6 +9,14 @@
 
 
     <url>
+        <loc>https://kys9261.github.io/2021/11/11/programming/playground/naver-sports-cheering-clone-1/</loc>
+        <lastmod>2021-11-10T17:28:42.306Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://kys9261.github.io/2021/11/09/programming/playground/long-polling-chatting/</loc>
         <lastmod>2021-11-09T02:07:53.119Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -193,14 +201,6 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/05/02/programming/devops/how-to-install-sonarqube-on-ubuntu/</loc>
-        <lastmod>2020-01-18T17:06:50.938Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>https://kys9261.github.io/2019/04/12/programming/devops/how-to-install-gitlab-on-ubuntu/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -209,7 +209,7 @@
     </url>
 
     <url>
-        <loc>https://kys9261.github.io/2019/03/21/programming/algorithm/codingTest/hackerrank-codingtest-input/</loc>
+        <loc>https://kys9261.github.io/2019/05/02/programming/devops/how-to-install-sonarqube-on-ubuntu/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -218,6 +218,14 @@
 
     <url>
         <loc>https://kys9261.github.io/2019/03/15/programming/algorithm/codingTest/codingTest-Practise/</loc>
+        <lastmod>2020-01-18T17:06:50.938Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://kys9261.github.io/2019/03/21/programming/algorithm/codingTest/hackerrank-codingtest-input/</loc>
         <lastmod>2020-01-18T17:06:50.938Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
