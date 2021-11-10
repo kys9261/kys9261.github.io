@@ -21,7 +21,7 @@
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="https://user-images.githubusercontent.com/7028715/141162632-14d01ae1-00f2-48f1-8b42-352c1a68ddf3.png">
 <meta property="article:published_time" content="2021-11-10T17:24:39.000Z">
-<meta property="article:modified_time" content="2021-11-10T17:28:42.306Z">
+<meta property="article:modified_time" content="2021-11-10T17:30:48.465Z">
 <meta property="article:author" content="Mike Kim">
 <meta property="article:tag" content="websocket">
 <meta property="article:tag" content="socket.io">
@@ -219,10 +219,10 @@ ga('send', 'pageview');
 <p><img src="https://user-images.githubusercontent.com/7028715/141162632-14d01ae1-00f2-48f1-8b42-352c1a68ddf3.png" alt="네이버 스포츠 응원팀 선택하기"></p>
 <p>그래서 자연스럽게 크롬 개발자 콘솔을 열어서 통신이 어떻게 진행되고 있는지 보았는데요. </p>
 <p><img src="https://user-images.githubusercontent.com/7028715/141098588-447cb15e-e733-4a6f-b6ab-c6bb0147cf8c.png" alt="엄청난 양의 네트워크 요청"></p>
-<p>그래서 저 데이터를 다 확인하기보다는 예상으로는 API로 데이터를 받아올거 같아서 <code>Fetch/XHR</code> 탭을 눌러서 데이터를 확인해보았습니다. </p>
+<p>그래서 저 데이터를 다 확인하기보다는 예상으로는 API로 데이터를 받아올거 같아서 <code>Fetch/XHR</code>(비동기 통신) 탭을 눌러서 데이터를 확인해보았습니다. </p>
 <p>근데 이상한점이 있었던게 데이터가 주기적으로 변경되는거면 API 호출 기록이 지속적으로 추가 됐을거 같은데 추가되는 네트워크 요청은 영상 스트리밍 관련된 요청이었고, 그 전에 요청된 데이터에는 응원 갯수를 노출시켜줄만한 데이터는 안보였습니다.</p>
 <p>그래서 저 데이터가 자바스크립트를 이용해 임의로 만든게 아닐까 하는 의심을 해보았습니다. 네이버가 그렇게 대충 구현하지는 않았을거 같지만 정확하게 데이터를 어떻게 가져오는지 모르는 상황이라 그런 생각이 들었습니다.</p>
-<p><code>JS</code>탭을 눌러서 뭔가 저 기능에 영향이 있을법한 코드가 있는지 찾아보던 와중에 </p>
+<p><code>JS</code>(JavaScript)탭을 눌러서 뭔가 저 기능에 영향이 있을법한 코드가 있는지 찾아보던 와중에 </p>
 <p><img src="https://user-images.githubusercontent.com/7028715/141100348-8e153d9d-c17f-4d60-8383-f93c3a597761.png" alt="의심이 가는 부분을 찾았다"></p>
 <p>의심이 가는 이름이 있는 요청을 찾았습니다. 뭔가 <code>sportsLike</code>라는 이름이 저 기능과 어울리는거 같은데? 라는 생각이 들었씁니다.</p>
 <p>두개의 요청중 처음은 인증을 위한 토큰을 받아오고 있었고, 두번째 요청이 제가 원하는 데이터랑 부합했습니다.</p>
@@ -232,7 +232,7 @@ ga('send', 'pageview');
 <p>중계 페이지 URL에도 <code>contentsId</code>와 동일한 값이 있었습니다.</p>
 <p>그 다음 빨간박스의 <code>reactions</code>가 실제 응원 갯수를 초기화 해주는 데이터 같았습니다. 여러개의 필드가 있었지만 다른건 어떨때 사용되는지 정확히는 모르겠고, 우선 <code>noLimit</code>의 <code>count</code>가 처음 설정될 응원 갯수고, <code>userCount</code>는 제가 누른 수를 의미하는거 같았습니다.<br>응원 버튼을 누를때마다 저 카운트가 올라가는것을 확인했습니다.</p>
 <p>우선은 저렇게 데이터를 확인했는데 아직 해소가 되지 않은 의문이 있습니다. 바로 <code>실시간으로 바뀌는 응원수는 어디서 오는것인가?</code>였는데요 제가 모르는 다른 데이터가 있을거 같아서 네트워크 탭의 다른 항목들을 뒤쳐보기로 했습니다.</p>
-<p>그중에 <code>WS</code>탭에 갔는데 웹소켓 요청이 1개 있었습니다.</p>
+<p>그중에 <code>WS</code>(웹소켓)탭에 갔는데 웹소켓 요청이 1개 있었습니다.</p>
 <p><img src="https://user-images.githubusercontent.com/7028715/141103378-ea236fc4-609e-4529-9e5a-66d58fbecb7e.png" alt="웹소켓 요청이 1개 있다?!"></p>
 <p>웹소켓 요청이 있었다는걸 알게된 순간 <code>아! 웹소켓을 이용해 실시간 통신을 하고 있었구나!</code>라고 생각했습니다.</p>
 <p>요청 URL 확인해서 얻은 정보가 있는데 <code>프로토콜은 wss</code>로 https와 같이 인증서 처리가 된 프로토콜 입니다.<br><code>URL에 socket.io</code>가 있는걸로 보아서 socket.io로 구현이 된거 같습니다. 그리고 쿼리스트링에 EIO=3, transport=websocket 두개의 데이터가 있는데 <code>EIO=3은 Engine.io 버젼이 3</code>이라는 뜻이고,<br><code>transport=websocket은 websocket으로 통신하겠다</code>는 의미입니다. <a target="_blank" rel="external nofollow noopener noreferrer" href="https://socket.io/docs/v4/client-options/#query">참고</a></p>
