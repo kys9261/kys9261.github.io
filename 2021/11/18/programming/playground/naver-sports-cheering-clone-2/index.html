@@ -2,21 +2,32 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="canonical" href="https://kys9261.github.io/tags/hacktoberfest/">
+    <link rel="canonical" href="https://kys9261.github.io/2021/11/18/programming/playground/naver-sports-cheering-clone-2/">
     
 
     
-    <title>태그: hacktoberfest | Mike Kim 개발 블로그</title>
+    <title>네이버 스포츠 실시간 응원 클론하기 - 요구사항/설계 | Mike Kim 개발 블로그</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Mike Kim 개발 블로그">
-<meta property="og:url" content="https://kys9261.github.io/tags/hacktoberfest/index.html">
+        <meta name="keywords" content="websocket,socket.io,네이버 스포츠 응원">
+    
+    <meta name="description" content="지난번엔 네이버 스포츠의 응원하기 기능을 분석해 보았습니다. 오늘은 분석한 내용을 토대로 만들어보기 위해서 요구사항을 정하고, 설계를 해보도록 하겠습니다. 최대한 간단하게 만들어보는걸 목표로 정했습니다. 요구사항응원하기 기능은 크게 두개의 기능으로 나눠집니다.  응원 갯수를 주기적으로 받아와야한다. 응원할 팀을 선택 할 수 있어야한다.  이렇게인데요 우선">
+<meta property="og:type" content="article">
+<meta property="og:title" content="네이버 스포츠 실시간 응원 클론하기 - 요구사항&#x2F;설계">
+<meta property="og:url" content="https://kys9261.github.io/2021/11/18/programming/playground/naver-sports-cheering-clone-2/index.html">
 <meta property="og:site_name" content="Mike Kim 개발 블로그">
+<meta property="og:description" content="지난번엔 네이버 스포츠의 응원하기 기능을 분석해 보았습니다. 오늘은 분석한 내용을 토대로 만들어보기 위해서 요구사항을 정하고, 설계를 해보도록 하겠습니다. 최대한 간단하게 만들어보는걸 목표로 정했습니다. 요구사항응원하기 기능은 크게 두개의 기능으로 나눠집니다.  응원 갯수를 주기적으로 받아와야한다. 응원할 팀을 선택 할 수 있어야한다.  이렇게인데요 우선">
 <meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://user-images.githubusercontent.com/7028715/142647518-a0331eed-a9cb-4267-b2c2-65dbf06b7de8.png">
+<meta property="article:published_time" content="2021-11-17T15:00:00.000Z">
+<meta property="article:modified_time" content="2021-11-28T12:14:50.685Z">
 <meta property="article:author" content="Mike Kim">
+<meta property="article:tag" content="websocket">
+<meta property="article:tag" content="socket.io">
+<meta property="article:tag" content="네이버 스포츠 응원">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/7028715/142647518-a0331eed-a9cb-4267-b2c2-65dbf06b7de8.png">
     
 
     
@@ -158,50 +169,172 @@ ga('send', 'pageview');
                         <div class="main-body-header">
     <h1 class="header">
     
-    <i class="icon fa fa-tag"></i>태그: <em>hacktoberfest</em>
+    <a class="page-title-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Programming/Playground/">Playground</a>
     </h1>
 </div>
 
                         <div class="main-body-content">
-                            
-
-    
-    
+                            <article id="post-programming/playground/naver-sports-cheering-clone-2" class="article article-single article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
         
-        
-        <section class="archives-wrap">
-            <div class="archive-year-wrap">
-                <a href="/archives/2021" class="archive-year"><i class="icon fa fa-calendar-o"></i>2021</a>
-            </div>
-            <div class="archives">
-    
-    
-    <div class="article-row">
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <div class="article-meta">
-            <div class="category">
-            <a class="article-category-link" href="/categories/Programming/">Programming</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Programming/Life/">Life</a>
-            </div>
-            <div class="date"><time datetime="2021-10-19T15:00:01.000Z" itemprop="datePublished">2021-10-20</time></div>
-        </div>
-        
+            <header class="article-header">
+                
     
         <h1 class="article-title" itemprop="name">
-        <a href="/2021/10/20/programming/life/2021-hacktoberfest/">2021 핵토버페스트 첫 참가기!</a>
+        네이버 스포츠 실시간 응원 클론하기 - 요구사항/설계
         </h1>
     
 
-        <p class="article-excerpt">
-            얼마전 탈잉에서 개발자들/개발자를 준비하는 사람들을 위한 온라인 클래스를 오픈한적이 있었는데요. 커리어 성장에 관한 내용을 주제로 5명의 연사분들이 강연을 해주셨는데 아주 유익했던 시간이었습니다! 강연중에 오픈소스로 성장하는 방법과 발표를 통해 성장하는 방법의 내용을 들으면서 핵토버페스트 라는 행사에 대해서 알게 되었는데요, 마침 10월에 진행하는 행사인데
-        </p>
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2021/11/18/programming/playground/naver-sports-cheering-clone-2/" class="article-date">
+            <time datetime="2021-11-17T15:00:00.000Z" itemprop="datePublished">2021-11-18</time>
+        </a>
+    </div>
+
+		
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/socket-io/" rel="tag">socket.io</a>, <a class="tag-link-link" href="/tags/websocket/" rel="tag">websocket</a>, <a class="tag-link-link" href="/tags/%EB%84%A4%EC%9D%B4%EB%B2%84-%EC%8A%A4%ED%8F%AC%EC%B8%A0-%EC%9D%91%EC%9B%90/" rel="tag">네이버 스포츠 응원</a>
+    </div>
+
+
+                
+                    <span id="busuanzi_container_page_pv"> 
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span> 
+                
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p>지난번엔 <a href="https://kys9261.github.io/2021/11/11/programming/playground/naver-sports-cheering-clone-1/">네이버 스포츠의 응원하기 기능을 분석</a>해 보았습니다.</p>
+<p>오늘은 분석한 내용을 토대로 만들어보기 위해서 요구사항을 정하고, 설계를 해보도록 하겠습니다. 최대한 간단하게 만들어보는걸 목표로 정했습니다.</p>
+<h1 id="요구사항"><a href="#요구사항" class="headerlink" title="요구사항"></a>요구사항</h1><p>응원하기 기능은 크게 두개의 기능으로 나눠집니다.</p>
+<ol>
+<li>응원 갯수를 주기적으로 받아와야한다.</li>
+<li>응원할 팀을 선택 할 수 있어야한다.</li>
+</ol>
+<p>이렇게인데요 우선 첫번째 기능에 대해서 구체적으로 정해봅시다.</p>
+<h2 id="1-응원-갯수를-주기적으로-받아와야한다"><a href="#1-응원-갯수를-주기적으로-받아와야한다" class="headerlink" title="1. 응원 갯수를 주기적으로 받아와야한다."></a>1. 응원 갯수를 주기적으로 받아와야한다.</h2><ul>
+<li>응원 갯수는 Home, Away팀 두개의 응원 갯수를 말합니다.  </li>
+<li>3초 간격으로 응원 갯수를 받아와야 합니다. (모든 유저가 3초 간격으로 받아야함)</li>
+<li>sportId, 즉 경기의 ID에 따라 데이터가 별도로 관리되어야합니다.</li>
+</ul>
+<h2 id="2-응원할-팀을-선택-할-수-있어야한다"><a href="#2-응원할-팀을-선택-할-수-있어야한다" class="headerlink" title="2. 응원할 팀을 선택 할 수 있어야한다."></a>2. 응원할 팀을 선택 할 수 있어야한다.</h2><ul>
+<li>Home, Away팀 중 하나의 팀을 선택할때 마다 해당 팀의 카운트가 1 증가한다.</li>
+<li>양팀을 중복으로 선택이 가능하다.</li>
+<li>선택의 횟수는 제한이 없다.</li>
+</ul>
+<p>위와같이 간단하게 요구사항을 정리해보았습니다. 생각보다 많지는 않은거 같은데 개발하다보면 더 많은 내용이 나올거 같습니다.</p>
+<h1 id="설계"><a href="#설계" class="headerlink" title="설계"></a>설계</h1><p>설계를 하면서 가장 중요하게 생각해야할 부분이 <code>응원 갯수를 어디에 어떻게 저장할것인가?</code> 하는 것이었는데요. 아래와 같은 조건을 고려했습니다.</p>
+<ol>
+<li>삽입, 조회가 빈번하게 일어난다.</li>
+<li>응원갯수는 정수형으로 관리한다.</li>
+</ol>
+<p>위 사항을 고려했을때 redis를 사용하는게 제일 적합하다고 판단했고, 레디스의 Hash와 <a target="_blank" rel="external nofollow noopener noreferrer" href="http://redisgate.kr/redis/command/hincrby.php">hincrby 명령어</a>를 이용해서 응원 갯수를 카운트 하는 형태로 구현하면 될거 같습니다.</p>
+<p>DB외에 나머지는 이전 포스팅에서 분석한 내용을 토대로 Node.js / Socket.io를 이용해 구현해보려고 합니다.<br>간단하게 도식화를 해보았는데요 샘플이기때문에 Node.js에 서버와 클라이언트를 모두 구현하고, 레디스에 모든 데이터를 다 넣는 형태로 만들어볼 생각힙니다.</p>
+<p><img src="https://user-images.githubusercontent.com/7028715/142647518-a0331eed-a9cb-4267-b2c2-65dbf06b7de8.png"></p>
+<p>실제로 서비스를 운영단계까지 만든다고 하면 여러대의 레디스 서버와 함께 경기별, 사용자별 응원 데이터를 분리해서 저장하거나,<br>빈번한 입출력이 없을거 같은 사용자별 데이터는 RDB에 저장해도 될거 같고, 레디스도 <a target="_blank" rel="external nofollow noopener noreferrer" href="http://redisgate.kr/redis/configuration/replication.php">레플리케이션</a>을 이용해서 만약을 위한 이중화 작업을 해두는게 좋을거 같습니다.</p>
+<p>샘플이기 때문에 경기를 관리하는 기능은 제외하였습니다.</p>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><ol>
+<li>최초 응원갯수를 가져오는 API<br>GET: /sports/cheer/${SPORT_ID}</li>
+</ol>
+<p>Response</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;sportId&quot;</span>: <span class="string">&quot;SPORT_01&quot;</span>, </span><br><span class="line">    <span class="attr">&quot;cheer&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;home&quot;</span>: <span class="number">10</span>,</span><br><span class="line">        <span class="attr">&quot;away&quot;</span>: <span class="number">20</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>응원을 하는 API<br>POST: /sports/cheer</li>
+</ol>
+<p>Request</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;cheerType&quot;</span>: <span class="string">&quot;home&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;count&quot;</span>: <span class="string">&quot;1&quot;</span></span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
+<p>Response </p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 해당 경기에 사용자가 응원한 갯수를 보여줌</span></span><br><span class="line">    <span class="attr">&quot;sportId&quot;</span>: <span class="string">&quot;SPORT_01&quot;</span>, </span><br><span class="line">    <span class="attr">&quot;cheer&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;home&quot;</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">&quot;away&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>최대한 단순하게 만들어볼 생각으로 간단하게 API 설계를 진행해보았는데요.<br>다음번엔 이런 형태로 개발을 진행하면 될거 같습니다.</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://kys9261.github.io/2021/11/18/programming/playground/naver-sports-cheering-clone-2/" data-id="ckwj7gpq10001fhupaqggfzzu" class="article-share-link"><i class="fa fa-share"></i>공유하기</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
     </div>
 </article>
-    </div>
 
-
-    </div></section>
+    <section id="comments">
+    
+        <script src="https://utteranc.es/client.js" repo="kys9261/blog-comments" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+</script>
+    
+    </section>
 
 
 
@@ -239,6 +372,19 @@ ga('send', 'pageview');
             
         </ul>
     </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2021/11/11/programming/playground/naver-sports-cheering-clone-1/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">오래된</strong>
+        <p class="article-nav-title">네이버 스포츠 실시간 응원 클론하기 - 분석</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
     
     <div class="widgets-container">
         
