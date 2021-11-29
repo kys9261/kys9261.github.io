@@ -21,7 +21,7 @@
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="https://user-images.githubusercontent.com/7028715/142647518-a0331eed-a9cb-4267-b2c2-65dbf06b7de8.png">
 <meta property="article:published_time" content="2021-11-27T15:00:00.000Z">
-<meta property="article:modified_time" content="2021-11-29T15:36:40.058Z">
+<meta property="article:modified_time" content="2021-11-29T16:05:00.077Z">
 <meta property="article:author" content="Mike Kim">
 <meta property="article:tag" content="websocket">
 <meta property="article:tag" content="socket.io">
@@ -254,7 +254,7 @@ ga('send', 'pageview');
 <li>응원을 하는 API<br>POST: /sports/cheer/${SPORTS_ID}</li>
 </ol>
 <p>Request</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;cheerType&quot;</span>: <span class="string">&quot;home&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;count&quot;</span>: <span class="string">&quot;1&quot;</span></span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;cheerType&quot;</span>: <span class="string">&quot;home&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;count&quot;</span>: <span class="number">1</span></span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
 <p>Response </p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 해당 경기에 사용자가 응원한 갯수를 보여줌</span></span><br><span class="line">    <span class="attr">&quot;sportsId&quot;</span>: <span class="string">&quot;SPORTS_01&quot;</span>, </span><br><span class="line">    <span class="attr">&quot;cheer&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;home&quot;</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">&quot;away&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>최대한 단순하게 만들어볼 생각으로 간단하게 API 설계를 진행해보았는데요.<br>다음번엔 이런 형태로 개발을 진행하면 될거 같습니다.</p>
